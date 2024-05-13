@@ -406,32 +406,6 @@ if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
         end
     end)
 end
-Tab:Toggle("Enable All Interactions","Sets the Enabled property of all Proximity Prompts to true. Useful for getting to the Rooms without a Skeleton Key.",false,function(Bool)
-    EnableInteractions = Bool
-    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
-        if Object:IsA("ProximityPrompt") then
-            if EnableInteractions and Object.Enabled then
-                table.insert(OldEnabled,Object)
-            end
-            Object.Enabled = EnableInteractions
-            if not EnableInteractions then
-                if table.find(OldEnabled, Object) then
-                    Object.Enabled = true
-                end
-            end
-            Object:GetPropertyChangedSignal("Enabled"):Connect(function()
-                if EnableInteractions then
-                    Object.Enabled = true
-                end
-            end)
-        end
-    end
-    if not EnableInteractions then
-        for index in pairs(OldEnabled) do
-            table.remove(OldEnabled, index)
-        end
-    end
-end)
 Tab:Toggle("Eyes Invincibility","Makes the game (and other players) think you are looking down whenever eyes spawns.",false,function(Bool)
     DisableEyes = Bool
     if workspace:FindFirstChild("Eyes") then
