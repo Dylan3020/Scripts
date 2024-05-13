@@ -34,6 +34,7 @@ local EyesOnMap = false
 local InstantInteract = false
 local IncreasedDistance = false
 local InteractNoclip = false
+local EnableInteractions = false
 local DisableDupe = false
 local NoDark = false
 local Noclip = false
@@ -253,7 +254,17 @@ local function ApplySettings(Object)
             if InteractNoclip then
                 Object.RequiresLineOfSight = not InteractNoclip
             end
-          end)
+            if EnableInteractions then
+                if Object.Enabled then
+                    table.insert(OldEnabled,Object)
+                end
+                Object.Enabled = true
+            end
+            Object:GetPropertyChangedSignal("Enabled"):Connect(function()
+                if EnableInteractions then
+                    Object.Enabled = true
+                end
+            end)
         end
         if Object.Name == "DoorFake" then
             Object:WaitForChild("Hidden").CanTouch = not DisableDupe
@@ -406,6 +417,32 @@ if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
         end
     end)
 end
+Tab:Toggle("Enable All Interactions","Sets the Enabled property of all Proximity Prompts to true. Useful for getting to the Rooms without a Skeleton Key.",false,function(Bool)
+    EnableInteractions = Bool
+    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+        if Object:IsA("ProximityPrompt") then
+            if EnableInteractions and Object.Enabled then
+                table.insert(OldEnabled,Object)
+            end
+            Object.Enabled = EnableInteractions
+            if not EnableInteractions then
+                if table.find(OldEnabled, Object) then
+                    Object.Enabled = true
+                end
+            end
+            Object:GetPropertyChangedSignal("Enabled"):Connect(function()
+                if EnableInteractions then
+                    Object.Enabled = true
+                end
+            end)
+        end
+    end
+    if not EnableInteractions then
+        for index in pairs(OldEnabled) do
+            table.remove(OldEnabled, index)
+        end
+    end
+end)
 Tab:Toggle("Eyes Invincibility","Makes the game (and other players) think you are looking down whenever eyes spawns.",false,function(Bool)
     DisableEyes = Bool
     if workspace:FindFirstChild("Eyes") then
