@@ -42,7 +42,6 @@ local Noclip = false
 local DisableA90 = false
 local NoclipNext = false
 local IsExiting = false
-local ClosetExitFix = false
 local NoBreaker = false
 local DisableEyes = false
 local DisableGlitch = false
@@ -367,12 +366,6 @@ local function ApplyCharacter(DontYield)
         task.wait(0.1)
         NoclipNext = false
     end)
-    Humanoid:GetPropertyChangedSignal("MoveDirection"):Connect(function()
-        if ClosetExitFix and Character:FindFirstChild("Collision") and Character:GetAttribute("Hiding") == true and tick() - HideTick > 1 then
-            CamLock:FireServer()
-        end
-    end)
-    Main_Game.PromptService.Highlight:Destroy()
 end
 ApplyCharacter(true)
 ApplyCustoms(true)
@@ -410,9 +403,6 @@ Bricks.A90.OnClientEvent:Connect(function()
             require(CustomA90Module)(require(Main_Game))
         end)
     end
-end)
-Tab:Toggle("Closet Exit Fix","Fixes the bug where you can't exit a closet right after entering it",false,function(Bool)
-    ClosetExitFix = Bool
 end)
 if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
     Tab:Toggle("Disable Dupe Doors","Makes it so you can't open duped doors",false,function(Bool)
@@ -645,15 +635,6 @@ Tab2:Toggle("Other ESP","Highlights all hostile entities.",false,function(Bool)
 end)
 Tab2:Toggle("Remove Glitch Jumpscare","Removes the Glitch visual and sound. Will still teleport you.",false,function(Bool)
     DisableGlitch = Bool
-end)
-Tab2:Toggle("Spam Motor Replication","Other players will basically see you having a seizure.",false,function(Bool)
-    if Bool then
-        SpoofMotor = game:GetService("RunService").Heartbeat:Connect(function()
-            MotorReplication:FireServer(math.random(1,100000),math.random(1,100000),math.random(1,100000),false)
-        end)
-    else
-        SpoofMotor:Disconnect()
-    end
 end)
 if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
     Tab2:Toggle("Unbreakable Lights","Makes it so entities like Rush and Ambush won't shatter/break the lights (which makes to prevent lag)",false,function(Bool)
