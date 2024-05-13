@@ -34,9 +34,7 @@ local EyesOnMap = false
 local InstantInteract = false
 local IncreasedDistance = false
 local InteractNoclip = false
-local EnableInteractions = false
 local DisableDupe = false
-local DisableSeek = false
 local NoDark = false
 local Noclip = false
 local DisableA90 = false
@@ -255,17 +253,7 @@ local function ApplySettings(Object)
             if InteractNoclip then
                 Object.RequiresLineOfSight = not InteractNoclip
             end
-            if EnableInteractions then
-                if Object.Enabled then
-                    table.insert(OldEnabled,Object)
-                end
-                Object.Enabled = true
-            end
-            Object:GetPropertyChangedSignal("Enabled"):Connect(function()
-                if EnableInteractions then
-                    Object.Enabled = true
-                end
-            end)
+          end)
         end
         if Object.Name == "DoorFake" then
             Object:WaitForChild("Hidden").CanTouch = not DisableDupe
@@ -277,10 +265,6 @@ local function ApplySettings(Object)
             for _,DoorNumber in pairs({Object.Sign.Stinker,Object.Sign.Stinker.Highlight,Object.Sign.Stinker.Shadow}) do
                 DoorNumber.Text = DisableDupe and "DUPE" or string.format("%0.4i",LatestRoom.Value)
             end
-        end
-        if Object.Parent and Object.Parent.Name == "TriggerEventCollision" then
-            Object.CanCollide = not DisableSeek
-            Object.CanTouch = not DisableSeek
         end
         if Object.Name == "Painting_Small" then
             local RNG = math.random(1,19)
@@ -409,14 +393,6 @@ if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
         DisableDupe = Bool
         for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
             if Object.Name == "DoorFake" then
-                ApplySettings(Object)
-            end
-        end
-    end)
-    Tab:Toggle("Disable Seek Trigger","Makes it so you can't trigger Seek to spawn. Other players still can.",false,function(Bool)
-        DisableSeek = Bool
-        for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
-            if Object.Name == "Collision" then
                 ApplySettings(Object)
             end
         end
