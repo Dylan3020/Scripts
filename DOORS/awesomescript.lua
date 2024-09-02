@@ -678,7 +678,7 @@ Tab2:Toggle("Spam Motor Replication","Other players will basically see you havin
         SpoofMotor:Disconnect()
     end
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+if Floor.Value == "Hotel" or Floor.Value == "Mines" then
     Tab2:Toggle("Unbreakable Lights","Makes it so entities like Rush and Ambush won't shatter/break the lights (which makes the room dark)",false,function(Bool)
         if Bool then
             Module_Events.shatter = function(Room)
