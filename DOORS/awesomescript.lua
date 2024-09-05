@@ -50,8 +50,6 @@ local DisableEyes = false
 local DisableGlitch = false
 local DisableSnare = false
 local WasteItems = false
-local ScreechModule
-local CustomScreechModule
 local TimothyModule
 local CustomTimothyModule
 local A90Module
@@ -132,19 +130,14 @@ local function ReplacePainting(Painting,NewImage,NewTitle)
 end
 local function ApplyCustoms(DontYield)
     task.wait(DontYield and 0 or 1)
-    ScreechModule = Modules:WaitForChild("Screech")
     TimothyModule = Modules.SpiderJumpscare
     A90Module = Modules.A90
-    CustomScreechModule = ScreechModule:Clone()
     CustomTimothyModule = TimothyModule:Clone()
-    CustomA90Module = A90Module:Clone() 
-    CustomScreechModule.Name = "CustomScreech"
+    CustomA90Module = A90Module:Clone()
     CustomTimothyModule.Name = "CustomTimothy"
     CustomA90Module.Name = "CustomA90"
-    CustomScreechModule.Parent = ScreechModule.Parent
     CustomTimothyModule.Parent = TimothyModule.Parent
     CustomA90Module.Parent = A90Module.Parent
-    ScreechModule:Destroy()
     TimothyModule:Destroy()
     A90Module:Destroy()
 end
@@ -391,13 +384,6 @@ workspace.ChildRemoved:Connect(function(Object)
         if not workspace:FindFirstChild("Eyes") then
             EyesOnMap = false
         end
-    end
-end)
-RemotesFolder.Screech.OnClientEvent:Connect(function()
-    if not table.find(ScreechSafeRooms, tostring(LocalPlayer:GetAttribute("CurrentRoom"))) and CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient") == Color3.new() then
-        require(CustomScreechModule)(require(Main_Game))
-    else
-        RemotesFolder.Screech:FireServer(true)
     end
 end)
 RemotesFolder.SpiderJumpscare.OnClientEvent:Connect(function(...)
