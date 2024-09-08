@@ -606,7 +606,7 @@ Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items li
         end
     end
 end)
-if Floor.Value == "Rooms" or Floor.Value == "Hotel" then
+if Floor.Value == "Rooms" or Floor.Value == "Mines" or Floor.Value == "Hotel" then
     Tab2:Toggle("Disable A-90","Disables A-90 visual, sound, and damage.",false,function(Bool)
         DisableA90 = Bool
     end)
