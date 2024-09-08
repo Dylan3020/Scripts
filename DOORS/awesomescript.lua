@@ -325,7 +325,7 @@ local function ApplySettings(Object)
             end
         end
         if Object.Name == "GiggleCeiling" then
-            Object:Hitbox.CanTouch = not DisableGiggle
+            Object.Hitbox.CanTouch = not DisableGiggle
             end
         end
         if Object.Name == "Snare" then
