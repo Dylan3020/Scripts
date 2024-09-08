@@ -426,6 +426,14 @@ if Floor.Value == "Hotel" or Floor.Value == "Fools" then
             end
         end
     end)
+    Tab:Toggle("Anti Giggle","Makes it so you won't get stunned or take damage from Giggle when going on it.",false,function(Bool)
+        DisableGiggle = Bool
+        for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+            if Object.Name == "Giggle" then
+                ApplySettings(Object)
+            end
+        end
+    end)
     Tab:Toggle("Anti Snare","Makes it so you won't get stunned or take damage from Snare when stepping on it.",false,function(Bool)
         DisableSnare = Bool
         for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
@@ -467,15 +475,6 @@ Tab:Toggle("Anti Eyes","Makes the game (and other players) think you are looking
         RemotesFolder.MotorReplication:FireServer(0,DisableEyes and -650 or 0,0,false)
     end
 end)
-Tab:Toggle("Anti Giggle", "Makes the game that Giggle doesnt hit you.",false,function(Bool)
-    DisableGiggle = Bool
-    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
-            if Object.Name == "GiggleCeiling" then
-                ApplySettings(Object)
-            end
-        end
-    end)
-end
 Tab:Toggle("Increased Door Opening Range","Makes it so you can open doors from much further away.",false,function(Bool)
     if Bool then
         DoorRange = RunService.Heartbeat:Connect(function()
