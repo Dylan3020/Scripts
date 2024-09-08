@@ -47,6 +47,7 @@ local RemoveDeathHint = false
 local ClosetExitFix = false
 local NoBreaker = false
 local DisableEyes = false
+local DisableGiggle = false
 local DisableGlitch = false
 local DisableSnare = false
 local WasteItems = false
@@ -320,7 +321,11 @@ local function ApplySettings(Object)
         if Object.Name == "Eyes" then
             EyesOnMap = true
             if DisableEyes then
-                MotorReplication:FireServer(0,-120,0,false)
+                RemotesFolder.MotorReplication:FireServer(0,-650,0,false)
+            end
+        end
+        if Object.Name == "GiggleCeiling" then
+            Object:Hitbox.CanTouch = not DisableGiggle
             end
         end
         if Object.Name == "Snare" then
@@ -421,7 +426,7 @@ if Floor.Value == "Hotel" or Floor.Value == "Fools" then
             end
         end
     end)
-    Tab:Toggle("Disable Snare","Makes it so you won't get stunned or take damage from Snare when stepping on it.",false,function(Bool)
+    Tab:Toggle("Anti Snare","Makes it so you won't get stunned or take damage from Snare when stepping on it.",false,function(Bool)
         DisableSnare = Bool
         for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
             if Object.Name == "Snare" then
@@ -456,12 +461,21 @@ Tab:Toggle("Enable All Interactions","Sets the Enabled property of all Proximity
         end
     end
 end)
-Tab:Toggle("Eyes Invincibility","Makes the game (and other players) think you are looking down whenever eyes spawns.",false,function(Bool)
+Tab:Toggle("Anti Eyes","Makes the game (and other players) think you are looking down whenever eyes spawns.",false,function(Bool)
     DisableEyes = Bool
     if workspace:FindFirstChild("Eyes") then
-        MotorReplication:FireServer(0,DisableEyes and -120 or 0,0,false)
+        RemotesFolder.MotorReplication:FireServer(0,DisableEyes and -650 or 0,0,false)
     end
 end)
+Tab:Toggle("Anti Giggle", "Makes the game that Giggle doesnt hit you.",false,function(Bool)
+    DisableGiggle = Bool
+    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+            if Object.Name == "GiggleCeiling" then
+                ApplySettings(Object)
+            end
+        end
+    end)
+end
 Tab:Toggle("Increased Door Opening Range","Makes it so you can open doors from much further away.",false,function(Bool)
     if Bool then
         DoorRange = RunService.Heartbeat:Connect(function()
