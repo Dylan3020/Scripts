@@ -127,7 +127,7 @@ local floor = gameData:WaitForChild("Floor")
 local latestRoom = gameData:WaitForChild("LatestRoom")
 
 local floorReplicated
-local remotesFolder
+local Bricks
 
 local camera = workspace.CurrentCamera
 local localPlayer = Players.LocalPlayer
@@ -160,9 +160,9 @@ local bypassed = false
 
 if not isFools then
     floorReplicated = ReplicatedStorage:WaitForChild("FloorReplicated")
-    remotesFolder = ReplicatedStorage:WaitForChild("RemotesFolder")
+    Bricks = ReplicatedStorage:WaitForChild("Bricks")
 else
-    remotesFolder = ReplicatedStorage:WaitForChild("EntityInfo")
+    Bricks = ReplicatedStorage:WaitForChild("EntityInfo")
 end
 
 type ESP = {
@@ -1046,7 +1046,7 @@ function Script.Functions.SetupCharacterConnection(newCharacter)
                 local padlock = workspace:FindFirstChild("Padlock", true)
 
                 if Toggles.AutoLibrarySolver.Value and tonumber(code) and Script.Functions.DistanceFromCharacter(padlock) <= Options.AutoLibraryDistance.Value then
-                    remotesFolder.PL:FireServer(code)
+                    Bricks.PL:FireServer(code)
                 end
 
                 if Toggles.NotifyPadlock.Value and count < 5 then
@@ -1098,7 +1098,7 @@ function Script.Functions.SetupCharacterConnection(newCharacter)
 
         Script.Connections["Oxygen"] = character:GetAttributeChangedSignal("Oxygen"):Connect(function()
             if character:GetAttribute("Oxygen") < 100 and Toggles.NotifyOxygen.Value then
-                firesignal(remotesFolder.Caption.OnClientEvent, string.format("Oxygen: %.1f", character:GetAttribute("Oxygen")))
+                firesignal(Bricks.Caption.OnClientEvent, string.format("Oxygen: %.1f", character:GetAttribute("Oxygen")))
             end
         end)
     end
@@ -1211,7 +1211,7 @@ function Script.Functions.SetupOtherPlayerConnection(player: Player)
                 local padlock = workspace:FindFirstChild("Padlock", true)
 
                 if Toggles.AutoLibrarySolver.Value and tonumber(code) and Script.Functions.DistanceFromCharacter(padlock) <= Options.AutoLibraryDistance.Value then
-                    remotesFolder.PL:FireServer(code)
+                    Bricks.PL:FireServer(code)
                 end
 
                 if Toggles.NotifyPadlock.Value and count < 5 then
@@ -1461,7 +1461,7 @@ local AutomationGroupBox = Tabs.Main:AddRightGroupbox("Automation") do
                         local padlock = workspace:FindFirstChild("Padlock", true)
 
                         if tonumber(code) and Script.Functions.DistanceFromCharacter(padlock) <= Options.AutoLibraryDistance.Value then
-                            remotesFolder.PL:FireServer(code)
+                            Bricks.PL:FireServer(code)
                         end
                     end
                 end
@@ -1559,7 +1559,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Revive",
         Func = function()
-            remotesFolder.Revive:FireServer()
+            Bricks.Revive:FireServer()
         end,
         DoubleClick = true
     })
@@ -1567,7 +1567,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Play Again",
         Func = function()
-            remotesFolder.PlayAgain:FireServer()
+            Bricks.PlayAgain:FireServer()
         end,
         DoubleClick = true
     })
@@ -1575,7 +1575,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Lobby",
         Func = function()
-            remotesFolder.Lobby:FireServer()
+            Bricks.Lobby:FireServer()
         end,
         DoubleClick = true
     })
@@ -2000,7 +2000,7 @@ task.spawn(function()
                 end
 
                 if bypassed then
-                    remotesFolder.ClimbLadder:FireServer()
+                    Bricks.ClimbLadder:FireServer()
                     bypassed = false
                     
                     Options.SpeedSlider:SetMax(Toggles.SpeedBypass.Value and 45 or (Toggles.EnableJump.Value and 3 or 7))
@@ -2181,7 +2181,7 @@ task.spawn(function()
                 end
             elseif not isEntitySpawned and rootPart.Anchored then
                 for i = 1, 10 do
-                    remotesFolder.CamLock:FireServer()
+                    Bricks.CamLock:FireServer()
                 end
             end
         end))
@@ -2433,7 +2433,7 @@ task.spawn(function()
 
         Toggles.InfRevives:OnChanged(function(value)
             if value and not localPlayer:GetAttribute("Alive") then
-                remotesFolder.Revive:FireServer()
+                Bricks.Revive:FireServer()
             end
         end)
 
@@ -3052,7 +3052,7 @@ Library:GiveSignal(localPlayer:GetAttributeChangedSignal("Alive"):Connect(functi
 
     if not alive and isFools and Toggles.InfRevives.Value then
         task.delay(1.25, function()
-            remotesFolder.Revive:FireServer()
+            Bricks.Revive:FireServer()
         end)
     end
 end))
@@ -3355,9 +3355,9 @@ Library:GiveSignal(RunService.RenderStepped:Connect(function()
         if Toggles.AntiEyes.Value and (workspace:FindFirstChild("Eyes") or workspace:FindFirstChild("BackdoorLookman")) then
             if not isFools then
                 -- lsplash meanie for removing other args in motorreplication
-                remotesFolder.MotorReplication:FireServer(-650)
+                Bricks.MotorReplication:FireServer(-650)
             else
-                remotesFolder.MotorReplication:FireServer(0, -90, 0, false)
+                Bricks.MotorReplication:FireServer(0, -90, 0, false)
             end
         end
     end
