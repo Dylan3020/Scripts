@@ -193,7 +193,7 @@ local function ApplySettings(Object)
                 if IsValid then
                     if Bool then
                         local TXT = IsValid[1]
-                        if IsValid[1] == "Door" then
+                        if IsValid[1] == "door" then
                             local RoomName
                             if Floor.Value == "Rooms" then
                                 RoomName = ""
