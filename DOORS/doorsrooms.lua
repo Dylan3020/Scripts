@@ -59,7 +59,7 @@ local CustomA90Module
 local DoorRange
 local SpoofMotor
 local ESP_Items = {KeyModel={"Key",1.5},LiveHintBook={"Book",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},LiveBreakerPolePickup={"Fuse",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},PickupItem={"Paper",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
-local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},Ambush_ModifierMoving={"Ambush",5},FigureRagdoll={"Figure",7},Shade={"Halt",5},LookmanNew={"Eyes",4},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},BackdoorLookmanNew={"Lookman",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Snare={"Snare",2},A60Moving={"A-60",10},A120Moving={"A-120",10},JeffTheKillerMoving={"Jeff",5}}
+local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},Ambush_ModifierMoving={"Ambush",5},FigureRagdoll={"Figure",7},Shade={"Halt",5},LookmanNew={"Eyes",4},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},BackdoorLookmanNew={"Lookman",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Landmine={"Snare",2},A60Moving={"A-60",10},A120Moving={"A-120",10},JeffTheKillerMoving={"Jeff",5}}
 local ESP_Other = {door={"Door",5},LeverForGate={"Lever",3},GoldPile={"Gold",0.5},Bandage={"Bandage",0.5}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
@@ -342,7 +342,7 @@ local function ApplySettings(Object)
                 MotorReplication:FireServer(0,-120,0,false)
             end
         end
-        if Object.Name == "Snare" then
+        if Object.Name == "Landmine" then
             Object.Hitbox.CanTouch = not DisableSnare
         end
     end)
