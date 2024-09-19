@@ -214,13 +214,12 @@ end
 
 function Script.Functions.DoorESP(room)
     local door = room:WaitForChild("door")
-    local locked = room:GetAttribute("RequiresKey")
 
     if door and not door:GetAttribute("Opened") then
         local doorEsp = Script.Functions.ESP({
             Type = "door",
             Object = door:WaitForChild("Door"),
-            Text = locked and string.format("Door %s [Locked]", room.Name + 1) or string.format("Door %s", room.Name + 1),
+            Text = Door and string.format("Door %s", room.Name + 1),
             Color = Options.DoorEspColor.Value
         })
 
@@ -236,7 +235,7 @@ function Script.Functions.EntityESP(entity)
         Object = entity,
         Text = Script.Functions.GetShortName(entity.Name),
         Color = Options.EntityEspColor.Value,
-        IsEntity = entity.Name ~= "TrollfaceMoving",
+        IsEntity = entity.Name ~= "TrollfaceMovingv",
     })
 end
 
@@ -1018,6 +1017,3 @@ SaveManager:BuildConfigSection(Tabs["UI Settings"])
 ThemeManager:ApplyToTab(Tabs["UI Settings"])
 
 SaveManager:LoadAutoloadConfig()
-
-
-print("hello world")
