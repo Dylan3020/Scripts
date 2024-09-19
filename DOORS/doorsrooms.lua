@@ -15,7 +15,7 @@ local Window = Library:CreateWindow({
 	MenuFadeTime = 0
 })
 local Tabs = {
-	Test = Window:AddTab("Test"),
+	Main = Window:AddTab("Main"),
 	["UI Settings"] = Window:AddTab("UI Settings"),
 }
 local AntiEntityGroupBox = Tabs.Test:AddLeftGroupbox("Test") do
