@@ -812,22 +812,6 @@ Options.DoorEspColor:OnChanged(function(value)
     end
 end)
 
-Toggles.ObjectiveESP:OnChanged(function(value)
-    if value then
-        for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
-            task.spawn(Script.Functions.ObjectiveESP, room)
-            
-            for _, child in pairs(room:GetDescendants()) do
-                task.spawn(Script.Functions.ObjectiveESPCheck, child)
-            end
-        end
-    else
-        for _, esp in pairs(Script.ESPTable.Objective) do
-            esp.Destroy()
-        end
-    end
-end)
-
 Options.ObjectiveEspColor:OnChanged(function(value)
     for _, esp in pairs(Script.ESPTable.Objective) do
         esp.SetColor(value)
