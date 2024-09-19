@@ -41,7 +41,6 @@ local DisableDupe = false
 local DisableSeek = false
 local NoDark = false
 local Noclip = false
-local DisableTimothy = false
 local DisableA90 = false
 local NoclipNext = false
 local IsExiting = false
@@ -51,6 +50,8 @@ local DisableEyes = false
 local DisableGlitch = false
 local DisableSnare = false
 local WasteItems = false
+local A90Module
+local CustomA90Module
 local DoorRange
 local SpoofMotor
 local ESP_Door = {door={"Door",5}}
@@ -129,15 +130,10 @@ local function ReplacePainting(Painting,NewImage,NewTitle)
 end
 local function ApplyCustoms(DontYield)
     task.wait(DontYield and 0 or 1)
-    TimothyModule = Modules.SpiderJumpscare
     A90Module = Modules.A90
-    CustomTimothyModule = TimothyModule:Clone()
     CustomA90Module = A90Module:Clone()
-    CustomTimothyModule.Name = "CustomTimothy"
     CustomA90Module.Name = "CustomA90"
-    CustomTimothyModule.Parent = TimothyModule.Parent
     CustomA90Module.Parent = A90Module.Parent
-    TimothyModule:Destroy()
     A90Module:Destroy()
 end
 local function ApplySpeed(Force)
@@ -164,11 +160,11 @@ end
 local function ApplySettings(Object)
     task.spawn(function()
         task.wait()
-        if (ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name]) and Object.ClassName == "Model" then
+        if (ESP_Door[Object.Name] or ESP_Objective[Object.Name] or ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name]) and Object.ClassName == "Model" then
             if Object:FindFirstChild("RushAmbush") then
                 if not Object.RushAmbush:WaitForChild("PlaySound").Playing then return end
             end
-            local Color = ESP_Items[Object.Name] and Color3.new(1,1) or ESP_Entities[Object.Name] and Color3.new(1) or Color3.new(0,1,1)
+            local Color = ESP_Door[Object.Name] and Color3.new(0,1,1) or local Color = ESP_Objective[Object.Name] and Color3.new(0,1,0) or local Color = ESP_Items[Object.Name] and Color3.new(1,1) or ESP_Entities[Object.Name] and Color3.new(1) or Color3.new(0,1,1)
             if Object.Name == "RushMoving" or Object.Name == "BackdoorLookman" or Object.Name == "AmbushMoving" or Object.Name == "BackdoorRush" or Object.Name == "Eyes" or Object.Name == "A60" or Object.Name == "A120" then
                 for i = 1, 100 do
                     if Object:FindFirstChildOfClass("Part") then
@@ -230,6 +226,8 @@ local function ApplySettings(Object)
                     end
                 end
             end
+            ApplyHighlight(ESP_Door[Object.Name],DoorESP)
+            ApplyHighlight(ESP_Objective[Object.Name],ObjectiveESP)
             ApplyHighlight(ESP_Items[Object.Name],ItemESP)
             ApplyHighlight(ESP_Entities[Object.Name],EntityESP)
             ApplyHighlight(ESP_Other[Object.Name],OtherESP)
@@ -383,14 +381,6 @@ workspace.ChildRemoved:Connect(function(Object)
         if not workspace:FindFirstChild("Eyes") then
             EyesOnMap = false
         end
-    end
-end)
-Bricks.SpiderJumpscare.OnClientEvent:Connect(function(...)
-    local Args = {...}
-    if not DisableTimothy then
-        task.spawn(function()
-            require(CustomTimothyModule)(table.unpack(Args))
-        end)
     end
 end)
 Bricks.A90.OnClientEvent:Connect(function()
@@ -656,11 +646,6 @@ end)
 Tab2:Toggle("Remove Glitch Jumpscare","Removes the Glitch visual and sound. Will still teleport you.",false,function(Bool)
     DisableGlitch = Bool
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
-    Tab2:Toggle("Remove Timothy Jumpscare","Removes the Timothy visual and sound. Will still deal damage.",false,function(Bool)
-        DisableTimothy = Bool
-    end)
-end
 Tab2:Toggle("Spam Motor Replication","Other players will basically see you having a seizure.",false,function(Bool)
     if Bool then
         SpoofMotor = game:GetService("RunService").Heartbeat:Connect(function()
