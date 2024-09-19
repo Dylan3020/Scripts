@@ -230,21 +230,6 @@ function Script.Functions.DoorESP(room)
     end
 end 
 
-function Script.Functions.ObjectiveESP(room)
-    if room:GetAttribute("RequiresKey") then
-        local key = room:FindFirstChild("KeyModel", true)
-
-        if key then
-            Script.Functions.ESP({
-                Type = "Objective",
-                Object = key,
-                Text = string.format("Key %s", room.Name + 1),
-                Color = Options.ObjectiveEspColor.Value
-            })
-        end
-    end
-end
-
 function Script.Functions.EntityESP(entity)
     Script.Functions.ESP({
         Type = "Entity",
@@ -277,39 +262,6 @@ function Script.Functions.RoomESP(room)
 
     if Toggles.DoorESP.Value then
         Script.Functions.DoorESP(room)
-    end
-    
-    if Toggles.ObjectiveESP.Value then
-        task.delay(waitLoad and 3 or 1, Script.Functions.ObjectiveESP, room)
-    end
-end
-
-function Script.Functions.ObjectiveESPCheck(child)
-    if child.Name == "LiveHintBook" then
-        Script.Functions.ESP({
-            Type = "Objective",
-            Object = child,
-            Text = "Book",
-            Color = Options.ObjectiveEspColor.Value
-        })
-    elseif child.Name == "FuseObtain" then
-        Script.Functions.ESP({
-            Type = "Objective",
-            Object = child,
-            Text = "Fuse",
-            Color = Options.ObjectiveEspColor.Value
-        })
-    elseif child.Name == "MinesAnchor" then
-        local sign = child:WaitForChild("Sign", 5)
-
-        if sign and sign:FindFirstChild("TextLabel") then
-            Script.Functions.ESP({
-                Type = "Objective",
-                Object = child,
-                Text = string.format("Anchor %s", sign.TextLabel.Text),
-                Color = Options.ObjectiveEspColor.Value
-            })
-        end
     end
 end
 
@@ -361,12 +313,6 @@ function Script.Functions.ChildCheck(child, includeESP)
     elseif child:IsA("BasePart") then
         if child.Name == "Egg" and Toggles.AntiGloomEgg.Value then
             child.CanTouch = false
-        end
-    end
-
-    if includeESP then
-        if Toggles.ObjectiveESP.Value then
-            task.spawn(Script.Functions.ObjectiveESPCheck, child)
         end
     end
 
@@ -561,13 +507,6 @@ local ESPGroupBox = Tabs.Visuals:AddLeftGroupbox("ESP") do
         Default = false,
     }):AddColorPicker("DoorEspColor", {
         Default = Color3.new(0, 1, 1),
-    })
-
-    ESPGroupBox:AddToggle("ObjectiveESP", {
-        Text = "Objective",
-        Default = false,
-    }):AddColorPicker("ObjectiveEspColor", {
-        Default = Color3.new(0, 1, 0),
     })
 
     ESPGroupBox:AddToggle("EntityESP", {
@@ -1079,3 +1018,6 @@ SaveManager:BuildConfigSection(Tabs["UI Settings"])
 ThemeManager:ApplyToTab(Tabs["UI Settings"])
 
 SaveManager:LoadAutoloadConfig()
+
+
+print("hello world")
