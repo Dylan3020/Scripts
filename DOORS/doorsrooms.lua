@@ -1,3 +1,13 @@
+--// Services \\--
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local SoundService = game:GetService("SoundService")
+local UserInputService = game:GetService("UserInputService")
+local PathfindingService = game:GetService("PathfindingService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+
 --// Library \\--
 local repo = "https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/"
 
@@ -18,39 +28,137 @@ local Window = Library:CreateWindow({
 })
 
 local Tabs = {
-	Test = Window:AddTab("Test"),
+	Main = Window:AddTab("Main"),
 	["UI Settings"] = Window:AddTab("UI Settings"),
 }
 
-local AntiEntityGroupBox = Tabs.Test:AddLeftGroupbox("Test") do
-    AntiEntityGroupBox:AddToggle("AntiHalt", {
-        Text = "Anti-Halt",
-        Default = false
-    })
+local MainFrame = MainUI.MainFrame
+local GameData = ReplicatedStorage.GameData
+local LatestRoom = GameData.LatestRoom
+local Floor = GameData.Floor
+local Bricks = ReplicatedStorage.Bricks
+local ClientModules = ReplicatedStorage.ClientModules
+local DeathHint = Bricks.DeathHint
+local CamLock = Bricks.CamLock
+local MotorReplication = Bricks.MotorReplication
+local EntityModules = ClientModules.EntityModules
+local CurrentRooms = workspace.CurrentRooms
+local MainUI = LocalPlayer.PlayerGui.MainUI
+local Main_Game = MainUI.Initiator.Main_Game
+local Modules = Main_Game.RemoteListener.Modules
 
-    AntiEntityGroupBox:AddToggle("AntiScreech", {
-        Text = "Anti-Screech",
-        Default = false
-    })
+type ESP = {
+    Color: Color3,
+    IsEntity: boolean,
+    IsDoubleDoor: boolean,
+    Object: Instance,
+    Offset: Vector3,
+    Text: string,
+    TextParent: Instance,
+    Type: string,
+}
+
+
+local Script = {
+    Binded = {}, -- ty geo for idea :smartindividual:
+    Connections = {},
+    ESPTable = {
+        Entity = {},
+	SideEntity = {},
+	None = {}
+	},
+	Temp = {
+        AnchorFinished = {},
+        FlyBody = nil,
+        Guidance = {},
+    }
+}
+
+local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "A60Moving", "A120Moving"}
+local SideEntityName = {"FigureRig", "GiggleCeiling", "GrumbleRig", "Snare"}
+local ShortNames = {
+    ["BlitzMoving"] = "Blitz"
+}
+
+function Script.Functions.GetShortName(entityName: string)
+    if ShortNames[entityName] then
+        return ShortNames[entityName]
+    end
+
+    local suffixPrefix = {
+        ["Backdoor"] = "",
+        ["Ceiling"] = "",
+        ["Moving"] = "",
+        ["Ragdoll"] = "",
+        ["Rig"] = "",
+        ["Wall"] = "",
+        ["Key"] = " Key",
+        ["Pack"] = " Pack",
+        ["Swarm"] = " Swarm",
+    }
+
+    for suffix, fix in pairs(suffixPrefix) do
+        entityName = entityName:gsub(suffix, fix)
+    end
+
+    return entityName
 end
 
-Toggles.AntiHalt:OnChanged(function(value)
-    if not entityModules then return end
-    local module = entityModules:FindFirstChild("Shade") or entityModules:FindFirstChild("_Shade")
-
-    if module then
-        module.Name = value and "_Shade" or "Shade"
+Toggles.EntityESP:OnChanged(function(value)
+    if value then
+        local currentRoomModel = workspace.CurrentRooms:FindFirstChild(currentRoom)
+        if currentRoomModel then
+            for _, entity in pairs(currentRoomModel:GetDescendants()) do
+                if table.find(SideEntityName, entity.Name) then
+                    Script.Functions.SideEntityESP(entity)
+                end
+            end
+        end
+    else
+        for _, esp in pairs(Script.ESPTable.Entity) do
+            esp.Destroy()
+        end
+        for _, esp in pairs(Script.ESPTable.SideEntity) do
+            esp.Destroy()
+        end
     end
 end)
 
-Toggles.AntiScreech:OnChanged(function(value)
-    if not mainGame then return end
-    local module = mainGame:FindFirstChild("Screech", true) or mainGame:FindFirstChild("_Screech", true)
+Library:GiveSignal(workspace.ChildAdded:Connect(function(child)
+    task.delay(0.1, function()
+        if table.find(EntityName, child.Name) then
+            task.spawn(function()
+                repeat
+                    task.wait()
+                until Script.Functions.DistanceFromCharacter(child) < 2000 or not child:IsDescendantOf(workspace)
 
-    if module then
-        module.Name = value and "_Screech" or "Screech"
-    end
-end)
+                if child:IsDescendantOf(workspace) then
+                    local entityName = Script.Functions.GetShortName(child.Name)
+
+                    if isFools and child.Name == "RushMoving" then
+                        entityName = child.PrimaryPart.Name:gsub("New", "")
+                    end
+
+                    if Toggles.EntityESP.Value then
+                        Script.Functions.EntityESP(child)  
+                    end
+
+                    if Toggles.NotifyEntity.Value then
+                        Script.Functions.Alert(entityName .. " has spawned!")
+                    end
+                end
+            end)
+        elseif EntityNotify[child.Name] and Toggles.NotifyEntity.Value then
+            Script.Functions.Alert(EntityNotify[child.Name])
+end
+
+if Toggles.EntityESP.Value and table.find(SideEntityName, asset.Name) then    
+                task.spawn(Script.Functions.SideEntityESP, asset)
+end
+
+
+
+
 
 local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
 local CreditsGroup = Tabs["UI Settings"]:AddRightGroupbox("Credits")
