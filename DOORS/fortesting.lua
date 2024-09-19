@@ -812,12 +812,6 @@ Options.DoorEspColor:OnChanged(function(value)
     end
 end)
 
-Options.ObjectiveEspColor:OnChanged(function(value)
-    for _, esp in pairs(Script.ESPTable.Objective) do
-        esp.SetColor(value)
-    end
-end)
-
 Toggles.EntityESP:OnChanged(function(value)
     if value then
         for _, entity in pairs(workspace.CurrentRooms:GetDescendants()) do
