@@ -97,7 +97,7 @@ local Con; Con = workspace.ChildAdded:Connect(function(__: Instance)
 
         Char.Humanoid.Died:Wait()
 
-        task.spawn(queue_on_teleport or syn and syn.queue_on_teleport, game:HttpGet("https://raw.githubusercontent.com/ActualMasterOogway/Scripts/main/Doors/Death-Farm.lua"))
+        task.spawn(queue_on_teleport or syn and syn.queue_on_teleport, game:HttpGet("https://raw.githubusercontent.com/Dylan3020/Scripts/refs/heads/main/DOORS/deathfarm.lua"))
 
         game.ReplicatedStorage.RemotesFolder.PlayAgain:FireServer()
 
