@@ -1,7 +1,3 @@
---// Services \\--
-local Lighting = game:GetService("Lighting")
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Library \\--
 local repo = "https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/"
@@ -231,12 +227,6 @@ local ShortNames = {
     ["LookmanNew"] = "Eyes",
     ["A60Moving"] = "A120Moving"
 }
-
-
-	print("Unloaded!")
-	Library.Unloaded = true
-    getgenv().doorsrooms_loaded = false
-end)
 
 local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
 local CreditsGroup = Tabs["UI Settings"]:AddRightGroupbox("Credits")
