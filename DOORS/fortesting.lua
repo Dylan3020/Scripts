@@ -2,11 +2,6 @@
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
-local SoundService = game:GetService("SoundService")
-local UserInputService = game:GetService("UserInputService")
-local PathfindingService = game:GetService("PathfindingService")
-local ProximityPromptService = game:GetService("ProximityPromptService")
 
 --// Library \\--
 local repo = "https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/"
