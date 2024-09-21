@@ -666,8 +666,8 @@ end
 function Script.Functions.GuidingLightEsp(guidance)
     local part = guidance:Clone()
     part.Anchored = true
-    part.Size = Vector3.new(6, 6, 6)
-    part.Transparency = 0.2
+    part.Size = Vector3.new(8, 5, 9)
+    part.Transparency = 0.6
     part.Name = "_Guidance"
 
     part:ClearAllChildren()
