@@ -217,13 +217,13 @@ function Script.Functions.ESP(args: ESP)
 end
 
 function Script.Functions.DoorESP(room)
-    local door = room:WaitForChild("Door")
+    local door = room:WaitForChild("door")
     local locked = room:GetAttribute("RequiresKey")
 
     if door and not door:GetAttribute("Opened") then
         local doorEsp = Script.Functions.ESP({
             Type = "Door",
-            Object = door:WaitForChild("Door"),
+            Object = door:WaitForChild("door"),
             Text = locked and string.format("Door %s [Locked]", room.Name + 1) or string.format("Door %s", room.Name + 1),
             Color = Options.DoorEspColor.Value
         })
@@ -461,7 +461,7 @@ function Script.Functions.GetShortName(entityName: string)
         return ShortNames[entityName]
     end
 
-    return tostring(entityName):gsub("Backdoor", ""):gsub("Ceiling", ""):gsub("Moving", ""):gsub("Ragdoll", ""):gsub("Rig", ""):gsub("Wall", ""):gsub("Pack", " Pack")
+    return tostring(entityName):gsub("Backdoor", "")gsub("Moving", ""):gsub("Ragdoll", ""):gsub("Rig", ""):gsub("Wall", ""):gsub("Pack", " Pack")
 end
 
 function Script.Functions.DistanceFromCharacter(position: Instance | Vector3)
