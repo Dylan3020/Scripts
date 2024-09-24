@@ -216,23 +216,42 @@ function Script.Functions.ESP(args: ESP)
     return ESPManager
 end
 
-function Script.Functions.DoorESP(room)
-    local door = room:WaitForChild("door")
-    local locked = room:GetAttribute("RequiresKey")
+function Script.Functions.DoorESP(door)
+    local door = door:WaitForChild("door", 5)
 
-    if door and not door:GetAttribute("Opened") then
+    if door then
+        local doorNumber = tonumber(room.Name) + 1
+        if isRooms then
+            doorNumber += 1000000
+        end
+
+        local doors = 0
+        for _, door in pairs(door:GetChildren()) do
+            if door.Name == "Door" then
+                doors += 1
+            end
+        end
+
+        
+        local isDoubleDoor = doors > 1
+
+        local Opened = door:GetAttribute("Opened")
+        local Locked = room:GetAttribute("RequiresKey")
+
+        local doorState = opened and " [Opened]" or (locked and " [Locked]" or "")
         local doorEsp = Script.Functions.ESP({
             Type = "Door",
-            Object = door:WaitForChild("door"),
-            Text = locked and string.format("Door %s [Locked]", room.Name + 1) or string.format("Door %s", room.Name + 1),
-            Color = Options.DoorEspColor.Value
+            Object = isDoubleDoor and door or door:WaitForChild("door"),
+            Text = string.format("Door %s %s", doorNumber, doorState),
+            Color = Options.DoorEspColor.Value,
+            IsDoubleDoor = isDoubleDoor
         })
 
         door:GetAttributeChangedSignal("Opened"):Connect(function()
-            doorEsp.Destroy()
+            doorEsp.Text = string.format("Door %s [Opened]", doorNumber)
         end)
     end
-end 
+end  
 
 function Script.Functions.ObjectiveESP(room)
     if room:GetAttribute("RequiresKey") then
