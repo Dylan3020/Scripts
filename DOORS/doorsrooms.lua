@@ -103,4 +103,4 @@ local compatibility_mode = false do
     end)
 end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Dylan3020/Scripts/refs/heads/main/DOORS/" .. (compatibility_mode and "solara" or "main") .. "fortesting" .. ".lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dylan3020/Scripts/refs/heads/main/DOORS/fortesting.lua"))()
