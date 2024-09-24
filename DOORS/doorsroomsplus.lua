@@ -68,14 +68,14 @@ local MainUI = PlayerGui:WaitForChild("MainUI")
 local MainGame = MainUI:WaitForChild("Initiator"):WaitForChild("Main_Game")
 local MainGameSrc = require(MainGame)
 
-local Character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-local Alive = localPlayer:GetAttribute("Alive")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Alive = LocalPlayer:GetAttribute("Alive")
 local Humanoid
 local RootPart
 local Collision
 local CollisionClone
 
-local isRooms = floor.Value == "Rooms"
+local isRooms = Floor.Value == "Rooms"
 
 type ESP = {
     Color: Color3,
