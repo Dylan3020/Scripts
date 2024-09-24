@@ -68,7 +68,7 @@ local MainUI = PlayerGui:WaitForChild("MainUI")
 local MainGame = MainUI:WaitForChild("Initiator"):WaitForChild("Main_Game")
 local MainGameSrc = require(MainGame)
 
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Character = LocalPlayer.Character
 local Alive = LocalPlayer:GetAttribute("Alive")
 local Humanoid
 local RootPart
