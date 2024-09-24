@@ -428,31 +428,31 @@ function Script.Functions.SetupRoomConnection(room)
 end
 
 function Script.Functions.SetupCharacterConnection(newCharacter)
-    character = newCharacter
+    Character = newCharacter
 
-    humanoid = character:WaitForChild("Humanoid")
+    Humanoid = Character:WaitForChild("Humanoid")
 
-    if humanoid then
-        Script.Connections["Died"] = humanoid.Died:Connect(function()
-            if collisionClone then
-                collisionClone:Destroy()
+    if Humanoid then
+        Script.Connections["Died"] = Humanoid.Died:Connect(function()
+            if CollisionClone then
+                CollisionClone:Destroy()
             end
         end)
     end
 
-    rootPart = character:WaitForChild("HumanoidRootPart")
+    RootPart = Character:WaitForChild("HumanoidRootPart")
 
-    collision = character:WaitForChild("Collision")
-    if collision then
-        collisionClone = collision:Clone()
-        collisionClone.CanCollide = false
-        collisionClone.Massless = true
-        collisionClone.Name = "CollisionClone"
-        if collisionClone:FindFirstChild("CollisionCrouch") then
-            collisionClone.CollisionCrouch:Destroy()
+    Collision = Character:WaitForChild("Collision")
+    if Collision then
+        CollisionClone = Collision:Clone()
+        CollisionClone.CanCollide = false
+        CollisionClone.Massless = true
+        CollisionClone.Name = "CollisionClone"
+        if CollisionClone:FindFirstChild("CollisionCrouch") then
+            CollisionClone.CollisionCrouch:Destroy()
         end
 
-        collisionClone.Parent = character
+        CollisionClone.Parent = Character
     end
 end
 
@@ -469,7 +469,7 @@ function Script.Functions.DistanceFromCharacter(position: Instance | Vector3)
         position = position:GetPivot().Position
     end
 
-    return (rootPart.Position - position).Magnitude
+    return (RootPart.Position - position).Magnitude
 end
 
 function Script.Functions.DisableDupe(dupeRoom, value)
@@ -546,7 +546,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Play Again",
         Func = function()
-            remotesFolder.PlayAgain:FireServer()
+            Bricks.PlayAgain:FireServer()
         end,
         DoubleClick = true
     })
@@ -779,8 +779,8 @@ Options.PromptReachMultiplier:OnChanged(function(value)
 end)
 
 Toggles.AntiHalt:OnChanged(function(value)
-    if not entityModules then return end
-    local module = entityModules:FindFirstChild("Shade") or entityModules:FindFirstChild("_Shade")
+    if not EntityModules then return end
+    local module = EntityModules:FindFirstChild("Shade") or EntityModules:FindFirstChild("_Shade")
 
     if module then
         module.Name = value and "_Shade" or "Shade"
@@ -788,8 +788,8 @@ Toggles.AntiHalt:OnChanged(function(value)
 end)
 
 Toggles.AntiScreech:OnChanged(function(value)
-    if not mainGame then return end
-    local module = mainGame:FindFirstChild("Screech", true) or mainGame:FindFirstChild("_Screech", true)
+    if not MainGame then return end
+    local module = MainGame:FindFirstChild("Screech", true) or MainGame:FindFirstChild("_Screech", true)
 
     if module then
         module.Name = value and "_Screech" or "Screech"
@@ -810,13 +810,13 @@ Toggles.SpeedBypass:OnChanged(function(value)
     if value then
         Options.SpeedSlider:SetMax(30)
 
-        while Toggles.SpeedBypass.Value and collisionClone do
-            collisionClone.Massless = not collisionClone.Massless
+        while Toggles.SpeedBypass.Value and CollisionClone do
+            CollisionClone.Massless = not CollisionClone.Massless
             task.wait(0.225)
         end
     else
         Options.SpeedSlider:SetMax(7)
-        if collisionClone then collisionClone.Massless = true end
+        if CollisionClone then CollisionClone.Massless = true end
     end
 end)
 
@@ -930,8 +930,8 @@ Toggles.Fullbright:OnChanged(function(value)
     if value then
         Lighting.Ambient = Color3.new(1, 1, 1)
     else
-        if alive then
-            Lighting.Ambient = workspace.CurrentRooms[localPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient")
+        if Alive then
+            Lighting.Ambient = workspace.CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient")
         else
             Lighting.Ambient = Color3.new(0, 0, 0)
         end
@@ -972,28 +972,24 @@ Library:GiveSignal(workspace.CurrentRooms.ChildAdded:Connect(function(room)
     task.spawn(Script.Functions.RoomESP, room)
 end))
 
-Library:GiveSignal(localPlayer.CharacterAdded:Connect(function(newCharacter)
-    task.delay(1, Script.Functions.SetupCharacterConnection, newCharacter)
+Library:GiveSignal(LocalPlayer:GetAttributeChangedSignal("Alive"):Connect(function()
+    Alive = LocalPlayer:GetAttribute("Alive")
 end))
 
-Library:GiveSignal(localPlayer:GetAttributeChangedSignal("Alive"):Connect(function()
-    alive = localPlayer:GetAttribute("Alive")
-end))
-
-Library:GiveSignal(playerGui.ChildAdded:Connect(function(child)
+Library:GiveSignal(PlayerGui.ChildAdded:Connect(function(child)
     if child.Name == "MainUI" then
-        mainUI = child
+        MainUI = child
 
         task.delay(1, function()
-            if mainUI then
-                mainGame = mainUI:WaitForChild("Initiator"):WaitForChild("Main_Game")
+            if MainUI then
+                MainGame = MainUI:WaitForChild("Initiator"):WaitForChild("Main_Game")
 
-                if mainGame then
-                    mainGameSrc = require(mainGame)
-                    if not mainGame:WaitForChild("RemoteListener", 5) then return end
+                if MainGame then
+                    MainGameSrc = require(MainGame)
+                    if not MainGame:WaitForChild("RemoteListener", 5) then return end
 
                     if Toggles.AntiScreech.Value then
-                        local module = mainGame:FindFirstChild("Screech", true)
+                        local module = MainGame:FindFirstChild("Screech", true)
 
                         if module then
                             module.Name = "_Screech"
@@ -1012,35 +1008,35 @@ Library:GiveSignal(Lighting:GetPropertyChangedSignal("Ambient"):Connect(function
 end))
 
 Library:GiveSignal(RunService.RenderStepped:Connect(function()
-    if mainGameSrc then
+    if MainGameSrc then
         if Toggles.NoCamShake.Value then
-            mainGameSrc.csgo = CFrame.new()
+            MainGameSrc.csgo = CFrame.new()
         end
     end
 
-    if character then
-        character:SetAttribute("SpeedBoostBehind", Options.SpeedSlider.Value)
+    if Character then
+        Character:SetAttribute("SpeedBoostBehind", Options.SpeedSlider.Value)
 
-        if rootPart then
-            rootPart.CanCollide = not Toggles.Noclip.Value
+        if RootPart then
+            RootPart.CanCollide = not Toggles.Noclip.Value
         end
 
-        if collision then
-            collision.CanCollide = not Toggles.Noclip.Value
-            if collision:FindFirstChild("CollisionCrouch") then
-                collision.CollisionCrouch.CanCollide = not Toggles.Noclip.Value
+        if Collision then
+            Collision.CanCollide = not Toggles.Noclip.Value
+            if Collision:FindFirstChild("CollisionCrouch") then
+                Collision.CollisionCrouch.CanCollide = not Toggles.Noclip.Value
             end
         end
 
-        if character:FindFirstChild("UpperTorso") then
-            character.UpperTorso.CanCollide = not Toggles.Noclip.Value
+        if Character:FindFirstChild("UpperTorso") then
+            Character.UpperTorso.CanCollide = not Toggles.Noclip.Value
         end
-        if character:FindFirstChild("LowerTorso") then
-            character.LowerTorso.CanCollide = not Toggles.Noclip.Value
+        if Character:FindFirstChild("LowerTorso") then
+            Character.LowerTorso.CanCollide = not Toggles.Noclip.Value
         end
 
-        if Toggles.DoorReach.Value and workspace.CurrentRooms:FindFirstChild(latestRoom.Value) then
-            local door = workspace.CurrentRooms[latestRoom.Value]:FindFirstChild("Door")
+        if Toggles.DoorReach.Value and workspace.CurrentRooms:FindFirstChild(LatestRoom.Value) then
+            local door = workspace.CurrentRooms[LatestRoom.Value]:FindFirstChild("Door")
 
             if door and door:FindFirstChild("ClientOpen") then
                 door.ClientOpen:FireServer()
@@ -1051,45 +1047,45 @@ end))
 
 --// Script Load \\--
 
-task.spawn(Script.Functions.SetupCharacterConnection, character)
+task.spawn(Script.Functions.SetupCharacterConnection, Character)
 
 --// Library Load \\--
 
 Library:OnUnload(function()
-    if character then
-        character:SetAttribute("SpeedBoostBehind", 0)
+    if Character then
+        Character:SetAttribute("SpeedBoostBehind", 0)
     end
 
-    if alive then
-        Lighting.Ambient = workspace.CurrentRooms[localPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient")
+    if Alive then
+        Lighting.Ambient = workspace.CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient")
     else
         Lighting.Ambient = Color3.new(0, 0, 0)
     end
 
-    if entityModules then
-        local module = entityModules:FindFirstChild("_Shade")
+    if EntityModules then
+        local module = EntityModules:FindFirstChild("_Shade")
 
         if module then
             module.Name = "Shade"
         end
     end
 
-    if mainGame then
-        local module = mainGame:FindFirstChild("_Screech", true)
+    if MainGame then
+        local module = MainGame:FindFirstChild("_Screech", true)
 
         if module then
             module.Name = "Screech"
         end
     end
 
-    if collision then
-        collision.CanCollide = not mainGameSrc.crouching
-        if collision:FindFirstChild("CollisionCrouch") then
-            collision.CollisionCrouch.CanCollide = mainGameSrc.crouching
+    if Collision then
+        Collision.CanCollide = not MainGameSrc.crouching
+        if Collision:FindFirstChild("CollisionCrouch") then
+            Collision.CollisionCrouch.CanCollide = MainGameSrc.crouching
         end
     end
 
-    collisionClone:Destroy()
+    CollisionClone:Destroy()
 
     for _, espType in pairs(Script.ESPTable) do
         for _, esp in pairs(espType) do
