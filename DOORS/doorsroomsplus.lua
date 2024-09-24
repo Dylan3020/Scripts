@@ -220,9 +220,9 @@ function Script.Functions.DoorESP(door)
     local door = door:WaitForChild("door", 5)
 
     if door then
-        local doorNumber = tonumber(room.Name) + 1
+        local door = tonumber(room.Name) + 1
         if isRooms then
-            doorNumber += 1000000
+            door += 1000000
         end
 
         local doors = 0
@@ -242,13 +242,13 @@ function Script.Functions.DoorESP(door)
         local doorEsp = Script.Functions.ESP({
             Type = "Door",
             Object = isDoubleDoor and door or door:WaitForChild("door"),
-            Text = string.format("Door %s %s", doorNumber, doorState),
+            Text = string.format("Door %s %s", door, doorState),
             Color = Options.DoorEspColor.Value,
             IsDoubleDoor = isDoubleDoor
         })
 
         door:GetAttributeChangedSignal("Opened"):Connect(function()
-            doorEsp.Text = string.format("Door %s [Opened]", doorNumber)
+            doorEsp.Text = string.format("Door %s [Opened]", door)
         end)
     end
 end  
