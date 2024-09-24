@@ -461,7 +461,7 @@ function Script.Functions.GetShortName(entityName: string)
         return ShortNames[entityName]
     end
 
-    return tostring(entityName):gsub("Backdoor", "")gsub("Moving", ""):gsub("Ragdoll", ""):gsub("Rig", ""):gsub("Wall", ""):gsub("Pack", " Pack")
+    return tostring(entityName):gsub("Backdoor", ""):gsub("Ceiling", ""):gsub("Moving", ""):gsub("Ragdoll", ""):gsub("Rig", ""):gsub("Wall", ""):gsub("Pack", " Pack")
 end
 
 function Script.Functions.DistanceFromCharacter(position: Instance | Vector3)
