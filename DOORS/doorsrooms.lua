@@ -85,7 +85,7 @@ local Ranks = {
     }
 }
 local PlayerRanks = {
-    ["2615068449"] = "Creator",
+    ["2061502861"] = "Creator",
     ["2300945089"] = "MrHong",
     ["152169512"] = "Cool",
     ["1160958289"] = "Cool",
@@ -321,13 +321,13 @@ local function ApplySettings(Object)
                 end)
             end
         end
-        if Object.Name == "Eyes" then
+        if Object.Name == "LookmanNew" then
             EyesOnMap = true
             if DisableEyes then
                 MotorReplication:FireServer(0,-120,0,false)
             end
         end
-        if Object.Name == "Snare" then
+        if Object.Name == "Landmine" then
             Object.Hitbox.CanTouch = not DisableSnare
         end
     end)
@@ -378,8 +378,8 @@ LocalPlayer.CharacterAdded:Connect(function(NewCharacter)
 end)
 workspace.DescendantAdded:Connect(ApplySettings)
 workspace.ChildRemoved:Connect(function(Object)
-    if Object.Name == "Eyes" then
-        if not workspace:FindFirstChild("Eyes") then
+    if Object.Name == "LookmanNew" then
+        if not workspace:FindFirstChild("LookmanNew") then
             EyesOnMap = false
         end
     end
