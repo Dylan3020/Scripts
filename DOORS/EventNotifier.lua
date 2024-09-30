@@ -15,6 +15,7 @@ elseif child.Name == "RushMoving" then
 spawned("Rush")
 elseif child.Name == "AmbushMoving" then
 spawned("Ambush")
+
 elseif child.Name == "TrollfaceMoving" then
 spawned("Trollface")
 elseif child.Name == "Josh HutchersonMoving" then
