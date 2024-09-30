@@ -1,7 +1,7 @@
 function spawned(entity)
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = entity.." Has Spawned!", -- Required
-    Text = entity, -- Required
+    Text = entity, -- Required!!
     Icon = "rbxassetid://1234567890" -- Optional
 })
 end
