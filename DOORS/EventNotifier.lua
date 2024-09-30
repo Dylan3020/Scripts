@@ -38,7 +38,7 @@ elseif child.Name == "eyeMoving" then
 spawned("eye")
 elseif child.Name == "scaryfaceMoving" then
 spawned("Scary Face")
-elseif child.name == "CustomMoving"
+elseif child.name == "CustomMoving" then
 spawned("Custom Entity")
 
 end
