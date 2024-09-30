@@ -54,7 +54,7 @@ local CustomA90Module
 local DoorRange
 local SpoofMotor
 local ESP_Items = {KeyModel={"Key",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
-local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},BackdoorLookmanNew={"Lookman",3},CustomMoving={"Custom Entity",5},Ambush_ModifierMoving={"Ambush",5},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},SeekMoving={"Seek",5.5},Screech={"Screech",2},LookmanNew={"Eyes",4},Landmine={"Snare",2},A120Moving={"A-120",5},A60Moving={"A-60",5}}
+local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},ShadowA60Moving={"Shadow A60",5},ShadowA120Moving={"Shadow A120",5},AnglerMoving={"Angler",5},FrogerMoving={"Froger",5},eyeMoving={"eye",5},scaryfaceMoving={"scary face",5},BackdoorLookmanNew={"Lookman",3},CustomMoving={"Custom Entity",5},Ambush_ModifierMoving={"Ambush",5},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},SeekMoving={"Seek",5.5},Screech={"Screech",2},LookmanNew={"Eyes",4},Landmine={"Snare",2},A120Moving={"A-120",5},A60Moving={"A-60",5}}
 local ESP_Other = {door={"Door",5},GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5},Bandage={"Bandage",0.5}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
