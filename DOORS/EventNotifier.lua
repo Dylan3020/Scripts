@@ -1,5 +1,5 @@
 local plr = game.Players.LocalPlayer
-local char = plr.Character or plr.CharacterAdded:Wait()
+local char = plr.Character
 local hum = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid")
 local entitynames = {"RushMoving","AmbushMoving", "BackdoorRush", "GloombatSwarm", "CustomMoving", "Ambush_ModifierMoving", "BlitzMoving", "TrollfaceMoving", "ShadowA60Moving", "ShadowA120Moving" "AnglerMoving", "FrogerMoving", "eyeMoving", "scaryfaceMoving", "A60Moving", "A120Moving", "Rush", "Ambush"}
  local addconnect
