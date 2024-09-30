@@ -8,7 +8,7 @@ local entitynames = {"RushMoving","AmbushMoving", "BackdoorRush", "GloombatSwarm
                 repeat task.wait() until plr:DistanceFromCharacter(v:GetPivot().Position) < 1000 or not v:IsDescendantOf(workspace)
                 
                 if v:IsDescendantOf(workspace) then
-        firesignal(game.ReplicatedStorage.RemotesFolder.Caption.OnClientEvent, v.Name:gsub("Moving","").." Spawned!")
+        firesignal(game.ReplicatedStorage.Bricks.Caption.OnClientEvent, v.Name:gsub("Moving","").." Spawned!")
 
 
 
