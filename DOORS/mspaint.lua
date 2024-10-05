@@ -1,6 +1,6 @@
 print("mspaint loaded")
 
-loadstring(game:HttpGet("loadstring(game:HttpGet("https://raw.githubusercontent.com/notpoiu/mspaint/main/main.lua"))()"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/notpoiu/mspaint/main/main.lua"))()
 
 game.Lighting.Sky:Remove()
 game.Lighting.Bloom:Remove()
