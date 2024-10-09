@@ -65,32 +65,6 @@ local ShatterFunction = Module_Events.shatter
 local HideTick = tick()
 local GlitchModule = EntityModules.Glitch
 local CustomGlitchModule = GlitchModule:Clone()
-local Ranks = {
-    Creator = {
-        Title = "awesome script creator",
-        Color = Color3.new(0,0.8,0)
-    },
-    MrHong = {
-        Title = "Mr. Hong",
-        Color = Color3.new(0.9,0,0)
-    },
-    Cool = {
-        Title = "Cool",
-        Color = Color3.new(0,0.7,1)
-    },
-    Greg = {
-        Title = "official greg heffley",
-        Color = Color3.new(0.3,0.3,0.3)
-    }
-}
-local PlayerRanks = {
-    ["2615068449"] = "Creator",
-    ["2300945089"] = "MrHong",
-    ["152169512"] = "Cool",
-    ["1160958289"] = "Cool",
-    ["211059753"] = "Greg",
-    ["47466584"] = "Cool"
-}
 CustomGlitchModule.Name = "CustomGlitch"
 CustomGlitchModule.Parent = GlitchModule.Parent
 GlitchModule:Destroy()
@@ -597,42 +571,6 @@ if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
             end
         else
             Module_Events.shatter = ShatterFunction
-        end
-    end)
-end
-TextChatService.OnIncomingMessage = function(MessageData)
-    task.spawn(function()
-        local ChatWindow = game.CoreGui.ExperienceChat.appLayout.chatWindow.scrollingView.bottomLockedScrollView.RCTScrollView.RCTScrollContentView
-        if MessageData.Status == Enum.TextChatMessageStatus.Sending or (MessageData.TextSource and MessageData.Status == Enum.TextChatMessageStatus.Success and MessageData.TextSource.UserId ~= LocalPlayer.UserId) then
-            if PlayerRanks[tostring(MessageData.TextSource.UserId)] then
-                local Rank = Ranks[PlayerRanks[tostring(MessageData.TextSource.UserId)]]
-                local Prefix = "<font color=\"#" .. string.format("%02X%02X%02X",Rank.Color.R*0xFF,Rank.Color.G*0xFF,Rank.Color.B*0xFF) .. "\">[" .. Rank.Title .. "]</font> "
-                local Message = ChatWindow:WaitForChild(MessageData.MessageId, 1)
-                if Message then
-                    Message.Text = Prefix .. Message.Text
-                    task.spawn(function()
-                        Message:GetPropertyChangedSignal("Text"):Wait()
-                        Message.Text = Prefix .. Message.Text
-                    end)
-                end
-                if Rank == Ranks.Creator then
-                    task.spawn(function()
-                        task.wait()
-                        if MessageData.Text:sub(1,1) == "/" then
-                            local args = MessageData.Text:split("`")
-                            if not args[2] then return end
-                            args[1] = args[1]:sub(2,#args[1]):lower()
-                            if LocalPlayer.Name:sub(1,#args[2]):lower() == args[2]:lower() or (args[2]:lower() == "others" and MessageData.TextSource.UserId ~= LocalPlayer.UserId) then
-                                if args[1] == "chat" and args[3] then
-                                    TextChatService.TextChannels.RBXGeneral:SendAsync(args[3])
-                                elseif args[1] == "a90" then
-                                    require(CustomA90Module)(require(Main_Game))
-                                end
-                            end
-                        end
-                    end)
-                end
-            end
         end
     end)
 end
