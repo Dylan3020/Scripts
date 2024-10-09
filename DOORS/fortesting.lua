@@ -186,7 +186,7 @@ GameTab:AddButton({
 	Callback = function()
         pcall(function()
             local HasKey = false
-            local CurrentDoor = workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("door")
+            local CurrentDoor = workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Door")
             for i,v in ipairs(CurrentDoor.Parent:GetDescendants()) do
                 if v.Name == "KeyObtain" then
                     HasKey = v
@@ -224,7 +224,7 @@ local AutoSkipCoro = coroutine.create(function()
             if OrionLib.Flags["AutoSkip"].Value == true and game:GetService("ReplicatedStorage").GameData.LatestRoom.Value < 10000 then
                 local HasKey = false
                 local LatestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom.Value
-                local CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom)]:WaitForChild("door")
+                local CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom)]:WaitForChild("Door")
                 for i,v in ipairs(CurrentDoor.Parent:GetDescendants()) do
                     if v.Name == "KeyObtain" then
                         HasKey = v
