@@ -54,9 +54,9 @@ local A90Module
 local CustomA90Module
 local DoorRange
 local SpoofMotor
-local ESP_Items = {KeyObtain={"Key",1.5},KeyModel={"Key",1.5},LiveHintBook={"Book",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},LiveBreakerPolePickup={"Fuse",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},PickupItem={"Paper",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
+local ESP_Items = {KeyObtain={"Key",1.5},KeyModel={"Key",1.5},LiveHintBook={"Book",1.5},Lighter={"Lighter",1.5},GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5},Bandage={"Bandage",0.5}Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},LiveBreakerPolePickup={"Fuse",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},PickupItem={"Paper",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
 local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},CustomMoving={"Custom Entity",5},Ambush_ModifierMoving={"Ambush",5},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},FigureRagdoll={"Figure",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Lookman={"Eyes",4},Landmine={"Snare",2},Snare={"Snare",2},A60Moving={"A-60",5},A120Moving={"A-120",10}}
-local ESP_Other = {door={"Door",5},LeverForGate={"Lever",3},Lever={"Lever",3},GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5},Bandage={"Bandage",0.5}}
+local ESP_Other = {door={"Door",5},LeverForGate={"Lever",3},Lever={"Lever",3}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
 local LatestRoom = GameData.LatestRoom
@@ -504,7 +504,7 @@ Tab:Slider("Speed Boost","Boosts your speed.",0,6,0,function(speed)
     SpeedBoost = speed
     ApplySpeed(true)
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
     Tab:Button("Unlock Library Padlock","Instantly inputs the Padlock code for Room 50. Can guess up to 3 digits. Requires 1 Player to have the hint paper.",function()
         local Paper = workspace:FindFirstChild("LibraryHintPaper",true) or workspace:FindFirstChild("LibraryHintPaperHard",true) or Players:FindFirstChild("LibraryHintPaper",true) or Players:FindFirstChild("LibraryHintPaperHard",true)
         if not Paper then
@@ -614,7 +614,7 @@ Tab2:Toggle("Item ESP","Highlights items like Keys, Books, and Crucifixes throug
         end
     end
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
     Tab2:Toggle("No Darkness Effect","Makes it so you can see further in dark rooms.",false,function(Bool)
         NoDark = Bool
         if CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("IsDark") then
