@@ -53,9 +53,9 @@ local A90Module
 local CustomA90Module
 local DoorRange
 local SpoofMotor
-local ESP_Items = {KeyModel={"Key",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
+local ESP_Items = {KeyModel={"Key",1.5},Lighter={"Lighter",1.5},GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
 local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},ShadowA60Moving={"Shadow A60",5},ShadowA120Moving={"Shadow A120",5},AnglerMoving={"Angler",5},FrogerMoving={"Froger",5},eyeMoving={"eye",5},scaryfaceMoving={"scary face",5},BackdoorLookmanNew={"Lookman",3},CustomMoving={"Custom Entity",5},Ambush_ModifierMoving={"Ambush",5},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},SeekMoving={"Seek",5.5},Screech={"Screech",2},LookmanNew={"Eyes",4},Landmine={"Snare",2},A120Moving={"A-120",5},A60Moving={"A-60",5}}
-local ESP_Other = {door={"Door",5},GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5},Bandage={"Bandage",0.5}}
+local ESP_Other = {door={"Door",5},Bandage={"Bandage",0.5}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
 local LatestRoom = GameData.LatestRoom
@@ -66,32 +66,6 @@ local ShatterFunction = Module_Events.shatter
 local HideTick = tick()
 local GlitchModule = EntityModules.Glitch
 local CustomGlitchModule = GlitchModule:Clone()
-local Ranks = {
-    Creator = {
-        Title = "awesome script creator",
-        Color = Color3.new(0,0.8,0)
-    },
-    MrHong = {
-        Title = "Mr. Hong",
-        Color = Color3.new(0.9,0,0)
-    },
-    Cool = {
-        Title = "Cool",
-        Color = Color3.new(0,0.7,1)
-    },
-    Greg = {
-        Title = "official greg heffley",
-        Color = Color3.new(0.3,0.3,0.3)
-    }
-}
-local PlayerRanks = {
-    ["2061502861"] = "Creator",
-    ["2300945089"] = "MrHong",
-    ["152169512"] = "Cool",
-    ["1160958289"] = "Cool",
-    ["211059753"] = "Greg",
-    ["47466584"] = "Cool"
-}
 CustomGlitchModule.Name = "CustomGlitch"
 CustomGlitchModule.Parent = GlitchModule.Parent
 GlitchModule:Destroy()
@@ -621,42 +595,6 @@ if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
             end
         else
             Module_Events.shatter = ShatterFunction
-        end
-    end)
-end
-TextChatService.OnIncomingMessage = function(MessageData)
-    task.spawn(function()
-        local ChatWindow = game.CoreGui.ExperienceChat.appLayout.chatWindow.scrollingView.bottomLockedScrollView.RCTScrollView.RCTScrollContentView
-        if MessageData.Status == Enum.TextChatMessageStatus.Sending or (MessageData.TextSource and MessageData.Status == Enum.TextChatMessageStatus.Success and MessageData.TextSource.UserId ~= LocalPlayer.UserId) then
-            if PlayerRanks[tostring(MessageData.TextSource.UserId)] then
-                local Rank = Ranks[PlayerRanks[tostring(MessageData.TextSource.UserId)]]
-                local Prefix = "<font color=\"#" .. string.format("%02X%02X%02X",Rank.Color.R*0xFF,Rank.Color.G*0xFF,Rank.Color.B*0xFF) .. "\">[" .. Rank.Title .. "]</font> "
-                local Message = ChatWindow:WaitForChild(MessageData.MessageId, 1)
-                if Message then
-                    Message.Text = Prefix .. Message.Text
-                    task.spawn(function()
-                        Message:GetPropertyChangedSignal("Text"):Wait()
-                        Message.Text = Prefix .. Message.Text
-                    end)
-                end
-                if Rank == Ranks.Creator then
-                    task.spawn(function()
-                        task.wait()
-                        if MessageData.Text:sub(1,1) == "/" then
-                            local args = MessageData.Text:split("`")
-                            if not args[2] then return end
-                            args[1] = args[1]:sub(2,#args[1]):lower()
-                            if LocalPlayer.Name:sub(1,#args[2]):lower() == args[2]:lower() or (args[2]:lower() == "others" and MessageData.TextSource.UserId ~= LocalPlayer.UserId) then
-                                if args[1] == "chat" and args[3] then
-                                    TextChatService.TextChannels.RBXGeneral:SendAsync(args[3])
-                                elseif args[1] == "a90" then
-                                    require(CustomA90Module)(require(Main_Game))
-                                end
-                            end
-                        end
-                    end)
-                end
-            end
         end
     end)
 end
