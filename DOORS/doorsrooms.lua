@@ -532,8 +532,8 @@ Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items li
         for _,Player in pairs(Players:GetPlayers()) do
             local function WasteItem(Item)
                 if Item.Parent ~= Character and Item.Parent.Parent ~= LocalPlayer then
-                    if ((Item.Name == "Lighter" or Item.Name == "Flashlight") and Item:GetAttribute("Enabled") == false) or Item.Name == "Vitamins" then
-                        Item.Remote:FireServer()
+                    if ((Item.Name == "Lighter" or Item.Name == "Flashlight") and Item:GetAttribute("Enabled") == false) or Item.Name == "M249" then
+                        Item.Shoot:FireServer()
                     end
                 end
             end
