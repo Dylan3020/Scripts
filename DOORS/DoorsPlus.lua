@@ -41,11 +41,9 @@ local Noclip = false
 local DisableA90 = false
 local NoclipNext = false
 local IsExiting = false
-local NoBreaker = false
 local DisableEyes = false
 local DisableGlitch = false
 local DisableSnare = false
-local WasteItems = false
 local ScreechModule
 local CustomScreechModule
 local TimothyModule
@@ -322,7 +320,7 @@ local function ApplySettings(Object)
                 end)
             end
         end
-        if Object.Name == "Eyes" then
+        if Object.Name == "Lookman" then
             EyesOnMap = true
             if DisableEyes then
                 MotorReplication:FireServer(0,-120,0,false)
@@ -379,8 +377,8 @@ LocalPlayer.CharacterAdded:Connect(function(NewCharacter)
 end)
 workspace.DescendantAdded:Connect(ApplySettings)
 workspace.ChildRemoved:Connect(function(Object)
-    if Object.Name == "Eyes" then
-        if not workspace:FindFirstChild("Eyes") then
+    if Object.Name == "Lookman" then
+        if not workspace:FindFirstChild("Lookman") then
             EyesOnMap = false
         end
     end
@@ -445,19 +443,8 @@ Tab:Toggle("Enable All Interactions","Sets the Enabled property of all Proximity
 end)
 Tab:Toggle("Eyes Invincibility","Makes the game (and other players) think you are looking down whenever eyes spawns.",false,function(Bool)
     DisableEyes = Bool
-    if workspace:FindFirstChild("Eyes") then
+    if workspace:FindFirstChild("Lookman") then
         MotorReplication:FireServer(0,DisableEyes and -120 or 0,0,false)
-    end
-end)
-Tab:Toggle("Increased Door Opening Range","Makes it so you can open doors from much further away.",false,function(Bool)
-    if Bool then
-        DoorRange = RunService.Heartbeat:Connect(function()
-            if not workspace:FindFirstChild("StupidAss") then
-                CurrentRooms:WaitForChild(LatestRoom.Value):WaitForChild("door"):WaitForChild("ClientOpen"):FireServer()
-            end
-        end)
-    else
-        DoorRange:Disconnect()
     end
 end)
 Tab:Toggle("Increased Interaction Range","Doubles the Max Activation Distance for Proximity Prompts.",false,function(Bool)
@@ -484,15 +471,6 @@ Tab:Toggle("Interact Through Objects","Lets you interact with Proximity Prompts 
         end
     end
 end)
-Tab:Toggle("No Breaker Puzzle","Tricks the game into thinking you completed the breaker puzzle at Room 100. May take up to 10 seconds to work.",false,function(Bool)
-    NoBreaker = Bool
-    while task.wait(1) do
-        if not NoBreaker then
-            break
-        end
-        Bricks.EBF:FireServer()
-    end
-end)
 Tab:Toggle("Noclip","Lets you walk through any object. Does not work on Doors.",false,function(Bool)
     Noclip = Bool
     if Character:FindFirstChild("Collision") then
@@ -504,7 +482,7 @@ Tab:Slider("Speed Boost","Boosts your speed.",0,6,0,function(speed)
     SpeedBoost = speed
     ApplySpeed(true)
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
+if Floor.Value == "Hotel" or Floor.Value == "Fools" then
     Tab:Button("Unlock Library Padlock","Instantly inputs the Padlock code for Room 50. Can guess up to 3 digits. Requires 1 Player to have the hint paper.",function()
         local Paper = workspace:FindFirstChild("LibraryHintPaper",true) or workspace:FindFirstChild("LibraryHintPaperHard",true) or Players:FindFirstChild("LibraryHintPaper",true) or Players:FindFirstChild("LibraryHintPaperHard",true)
         if not Paper then
@@ -570,29 +548,6 @@ if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
         end
     end)
 end
-Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items like Vitamins, The Lighter, and The Flashlight.",false,function(Bool)
-    WasteItems = Bool
-    while task.wait(1) do
-        if not WasteItems then
-            break
-        end
-        for _,Player in pairs(Players:GetPlayers()) do
-            local function WasteItem(Item)
-                if Item.Parent ~= Character and Item.Parent.Parent ~= LocalPlayer then
-                    if ((Item.Name == "Lighter" or Item.Name == "Flashlight") and Item:GetAttribute("Enabled") == false) or Item.Name == "Vitamins" then
-                        Item.Remote:FireServer()
-                    end
-                end
-            end
-            for _,Item in pairs(Player.Backpack:GetChildren()) do
-                WasteItem(Item)
-            end
-            for _,Item in pairs(Player.Character:GetChildren()) do
-                WasteItem(Item)
-            end
-        end
-    end
-end)
 if Floor.Value == "Hotel" then
     Tab2:Toggle("Disable A-90","Disables A-90 visual, sound, and damage.",false,function(Bool)
         DisableA90 = Bool
