@@ -221,7 +221,7 @@ local AutoSkipCoro = coroutine.create(function()
         while true do
             task.wait()
             pcall(function()
-            if OrionLib.Flags["AutoSkip"].Value == true and game:GetService("ReplicatedStorage").GameData.LatestRoom.Value < 10000 then
+            if OrionLib.Flags["AutoSkip"].Value == true and game:GetService("ReplicatedStorage").GameData.LatestRoom.Value < 20000 then
                 local HasKey = false
                 local LatestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom.Value
                 local CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom)]:WaitForChild("Door")
