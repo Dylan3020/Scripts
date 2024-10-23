@@ -587,7 +587,7 @@ Tab2:Toggle("Other ESP","Highlights all hostile entities.",false,function(Bool)
         end
     end
 end)
-Tab:Toggle("Objective ESP","Highlights the thing you have to do.",false,function(Bool)
+Tab2:Toggle("Objective ESP","Highlights the thing you have to do.",false,function(Bool)
     ObjectiveESP = Bool
     for _,Object in pairs(Workspace:GetDescendants()) do
         if ESP_Objective[Object.Name] then
