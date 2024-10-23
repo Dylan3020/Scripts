@@ -42,6 +42,8 @@ elseif child.Name == "CustomMoving" then
 spawned("Custom Entity")
 elseif child.Name == "Jeff The Killer" then
 spawned("Jeff The Killer")
+elseif child.name == "PandemoniumMoving" then
+spawned("Pandemonium")
 
 end
 end)
