@@ -221,7 +221,7 @@ local function ApplySettings(Object)
             ApplyHighlight(ESP_Entities[Object.Name],EntityESP)
             ApplyHighlight(ESP_Other[Object.Name],OtherESP)
             ApplyHighlight(ESP_Objective[Object.Name],ObjectiveESP)
-            ApplyHighlight(ESP_Gold[Objective.Name],GoldESP)    
+            ApplyHighlight(ESP_Gold[Object.Name],GoldESP)    
         end
         if Object:IsA("ProximityPrompt") then
             if InstantInteract then
