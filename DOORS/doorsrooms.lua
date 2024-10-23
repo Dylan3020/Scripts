@@ -590,7 +590,7 @@ end)
 Tab:Toggle("Objective ESP","Highlights the thing you have to do.",false,function(Bool)
     ObjectiveESP = Bool
     for _,Object in pairs(Workspace:GetDescendants()) do
-        if ESP_Objective[Objective.Name] then
+        if ESP_Objective[Object.Name] then
             ApplySettings(Object)
         end
     end
