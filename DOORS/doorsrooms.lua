@@ -46,7 +46,6 @@ local IsExiting = false
 local DisableEyes = false
 local DisableGlitch = false
 local DisableSnare = false
-local WasteItems = false
 local ScreechModule
 local CustomScreechModule
 local TimothyModule
@@ -529,29 +528,6 @@ if Floor.Value == "Hotel" or Floor.Value == "Fools" then
         end
     end)
 end
-Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items like Vitamins, The Lighter, and The Flashlight.",false,function(Bool)
-    WasteItems = Bool
-    while task.wait(1) do
-        if not WasteItems then
-            break
-        end
-        for _,Player in pairs(Players:GetPlayers()) do
-            local function WasteItem(Item)
-                if Item.Parent ~= Character and Item.Parent.Parent ~= LocalPlayer then
-                    if ((Item.Name == "Lighter" or Item.Name == "Flashlight") and Item:GetAttribute("Enabled") == false) or Item.Name == "M249" then
-                        Item.Shoot:FireServer()
-                    end
-                end
-            end
-            for _,Item in pairs(Player.Backpack:GetChildren()) do
-                WasteItem(Item)
-            end
-            for _,Item in pairs(Player.Character:GetChildren()) do
-                WasteItem(Item)
-            end
-        end
-    end
-end)
 if Floor.Value == "Hotel" or Floor.Value == "Rooms" then
     Tab2:Toggle("Disable A-90","Disables A-90 visual, sound, and damage.",false,function(Bool)
         DisableA90 = Bool
