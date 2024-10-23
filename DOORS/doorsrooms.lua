@@ -31,6 +31,7 @@ local ItemESP = false
 local EntityESP = false
 local OtherESP = false
 local ObjectiveESP = false
+local GoldESP = false
 local EyesOnMap = false
 local InstantInteract = false
 local IncreasedDistance = false
@@ -54,10 +55,11 @@ local A90Module
 local CustomA90Module
 local DoorRange
 local SpoofMotor
-local ESP_Items = {Lighter={"Lighter",1.5},Bandage={"Bandage",0.5},GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5}}
+local ESP_Items = {Lighter={"Lighter",1.5},Bandage={"Bandage",0.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5}}
 local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},ContentMoving={"Content",5},BaldiMoving={"Baldi",5},PandemoniumMoving={"Pandemonium",5},ShadowA60Moving={"Shadow A60",5},ShadowA120Moving={"Shadow A120",5},AnglerMoving={"Angler",5},FrogerMoving={"Froger",5},eyeMoving={"eye",5},scaryfaceMoving={"scary face",5},BackdoorLookmanNew={"Lookman",3},CustomMoving={"Custom Entity",5},Ambush_ModifierMoving={"Ambush",5},BlitzMoving={"Blitz",5},TrollfaceMoving={"Troll Face",5},SeekMoving={"Seek",5.5},Screech={"Screech",2},LookmanNew={"Eyes",4},Landmine={"Snare",2},A120Moving={"A-120",5},A60Moving={"A-60",5}}
 local ESP_Other = {door={"Door",5}}
 local ESP_Objective = {KeyModel={"Key",1.5}}
+local ESP_Gold = {GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
 local LatestRoom = GameData.LatestRoom
@@ -137,11 +139,11 @@ end
 local function ApplySettings(Object)
     task.spawn(function()
         task.wait()
-        if (ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name] or ESP_Objective[Object.Name]) and Object.ClassName == "Model" then
+        if (ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name] or ESP_Objective[Object.Name] or ESP_Gold[Object.Name]) and Object.ClassName == "Model" then
             if Object:FindFirstChild("RushAmbush") then
                 if not Object.RushAmbush:WaitForChild("PlaySound").Playing then return end
             end
-            local Color = ESP_Items[Object.Name] and Color3.new(1,1,0) or ESP_Entities[Object.Name] and Color3.new(1) or ESP_Other[Object.Name] and Color3.new(0,1,1) or ESP_Objective[Object.Name] and Color3.new(0,1,0)
+            local Color = ESP_Items[Object.Name] and Color3.new(1,0,1) or ESP_Entities[Object.Name] and Color3.new(1) or ESP_Other[Object.Name] and Color3.new(0,1,1) or ESP_Objective[Object.Name] and Color3.new(0,1,0) or ESP_Gold[Object.Name] and Color3.new(1,1,0)
             if Object.Name == "RushMoving" or Object.Name == "A60" or Object.Name == "A120" or Object.Name == "Rush" or Object.Name == "Ambush" or Object.Name == "Blitz" or Object.Name == "BlitzMoving" or Object.Name == "TrollfaceMoving" or Object.Name == "Ambush_ModifierMoving" or Object.Name == "CustomMoving" or Object.Name == "AmbushMoving" or Object.Name == "Lookman" or Object.Name == "A60Moving" or Object.Name == "A120Moving" then
                 for i = 1, 100 do
                     if Object:FindFirstChildOfClass("Part") then
@@ -219,6 +221,7 @@ local function ApplySettings(Object)
             ApplyHighlight(ESP_Entities[Object.Name],EntityESP)
             ApplyHighlight(ESP_Other[Object.Name],OtherESP)
             ApplyHighlight(ESP_Objective[Object.Name],ObjectiveESP)
+            ApplyHighlight(ESP_Gold[Objective.Name],GoldESP)    
         end
         if Object:IsA("ProximityPrompt") then
             if InstantInteract then
@@ -591,6 +594,14 @@ Tab2:Toggle("Objective ESP","Highlights the thing you have to do.",false,functio
     ObjectiveESP = Bool
     for _,Object in pairs(Workspace:GetDescendants()) do
         if ESP_Objective[Object.Name] then
+            ApplySettings(Object)
+        end
+    end
+end)
+Tab2:Toggle("Gold ESP","Highlights all gold.",false,function(Bool)
+    GoldESP = Bool
+    for _,Object in pairs(workspace:GetDescendants()) do
+        if ESP_Gold[Object.Name] then
             ApplySettings(Object)
         end
     end
