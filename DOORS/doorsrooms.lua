@@ -32,6 +32,7 @@ local EntityESP = false
 local OtherESP = false
 local ObjectiveESP = false
 local GoldESP = false
+local KnobESP = false
 local EyesOnMap = false
 local InstantInteract = false
 local IncreasedDistance = false
@@ -59,6 +60,7 @@ local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},ContentMov
 local ESP_Other = {door={"Door",5}}
 local ESP_Objective = {KeyModel={"Key",1.5},LeverModel={"Lever Timer",0.5}}
 local ESP_Gold = {GoldPile_Medium={"Gold",0.5},GoldPile_Large={"Gold",0.5},GoldPile_Big={"Gold",0.5},GoldPile_Small={"Gold",0.5},GoldPile_Worthless={"Gold",0.5},GoldPile_Bar={"Gold",0.5},GoldPile_VeryLarge={"Gold",0.5}}
+local ESP_Knobs = {Knobs={"Knob",0.5}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
 local LatestRoom = GameData.LatestRoom
@@ -138,11 +140,11 @@ end
 local function ApplySettings(Object)
     task.spawn(function()
         task.wait()
-        if (ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name] or ESP_Objective[Object.Name] or ESP_Gold[Object.Name]) and Object.ClassName == "Model" then
+        if (ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name] or ESP_Objective[Object.Name] or ESP_Gold[Object.Name] or ESP_Knobs[Object.Name]) and Object.ClassName == "Model" then
             if Object:FindFirstChild("RushAmbush") then
                 if not Object.RushAmbush:WaitForChild("PlaySound").Playing then return end
             end
-            local Color = ESP_Items[Object.Name] and Color3.new(1,0,1) or ESP_Entities[Object.Name] and Color3.new(1) or ESP_Other[Object.Name] and Color3.new(0,1,1) or ESP_Objective[Object.Name] and Color3.new(0,1,0) or ESP_Gold[Object.Name] and Color3.new(1,1,0)
+            local Color = ESP_Items[Object.Name] and Color3.new(1,0,1) or ESP_Entities[Object.Name] and Color3.new(1) or ESP_Other[Object.Name] and Color3.new(0,1,1) or ESP_Objective[Object.Name] and Color3.new(0,1,0) or ESP_Gold[Object.Name] and Color3.new(1,1,0) or ESP_Knobs[Object.Name] and Color3.new(1,2,0)
             if Object.Name == "RushMoving" or Object.Name == "A60" or Object.Name == "A120" or Object.Name == "Rush" or Object.Name == "Ambush" or Object.Name == "Blitz" or Object.Name == "BlitzMoving" or Object.Name == "TrollfaceMoving" or Object.Name == "Ambush_ModifierMoving" or Object.Name == "CustomMoving" or Object.Name == "AmbushMoving" or Object.Name == "Lookman" or Object.Name == "A60Moving" or Object.Name == "A120Moving" then
                 for i = 1, 100 do
                     if Object:FindFirstChildOfClass("Part") then
@@ -220,7 +222,8 @@ local function ApplySettings(Object)
             ApplyHighlight(ESP_Entities[Object.Name],EntityESP)
             ApplyHighlight(ESP_Other[Object.Name],OtherESP)
             ApplyHighlight(ESP_Objective[Object.Name],ObjectiveESP)
-            ApplyHighlight(ESP_Gold[Object.Name],GoldESP)    
+            ApplyHighlight(ESP_Gold[Object.Name],GoldESP)
+            ApplyHighlight(ESP_Knobs[Object.Name],KnobESP)
         end
         if Object:IsA("ProximityPrompt") then
             if InstantInteract then
@@ -580,6 +583,14 @@ Tab2:Toggle("Gold ESP","Highlights all gold.",false,function(Bool)
         if ESP_Gold[Object.Name] then
             ApplySettings(Object)
         end
+    end
+end)
+Tab2:Toggle("Knob ESP","Highlights all knobs.",false,function(Bool)
+    KnobESP = Bool
+    for _,Object in pairs(workspace:GetDescendants()) do
+        if ESP_Knobs[Object.Name] then
+            ApplySettings(Object)
+        end    
     end
 end)
 Tab2:Toggle("Remove Glitch Jumpscare","Removes the Glitch visual and sound. Will still teleport you.",false,function(Bool)
