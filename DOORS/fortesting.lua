@@ -804,6 +804,13 @@ Toggles.AntiScreech:OnChanged(function(value)
     end
 end)
 
+Toggles.AntiEyes.Value and workspace:FindFirstChild("LookmanNew") then
+            -- lsplash meanie for removing other args in motorreplication
+            remotesFolder.MotorReplication:FireServer(-650)
+        end
+    end
+end))
+
 Toggles.SpeedBypass:OnChanged(function(value)
     if value then
         Options.SpeedSlider:SetMax(30)
@@ -1048,11 +1055,6 @@ Library:GiveSignal(RunService.RenderStepped:Connect(function()
             if door and door:FindFirstChild("ClientOpen") then
                 door.ClientOpen:FireServer()
             end
-        end
-
-        if Toggles.AntiEyes.Value and workspace:FindFirstChild("LookmanNew") then
-            -- lsplash meanie for removing other args in motorreplication
-            remotesFolder.MotorReplication:FireServer(-650)
         end
     end
 end))
