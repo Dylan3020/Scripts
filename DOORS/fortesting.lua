@@ -19,13 +19,13 @@ local Script = {
     Functions = {}
 }
 
-local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The Killer", "A60Moving", "A120Moving"}
+local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The KillerMoving", "A60Moving", "A120Moving"}
 local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "Snare"}
 local ShortNames = {
     ["BlitzMoving"] = "Blitz",
     ["BackdoorLookmanNew"] = "Lookman",
     ["LookmanNew"] = "Eyes",
-    ["Jeff The Killer"] = "Jeff The Killer"
+    ["Jeff The KillerMoving"] = "Jeff The Killer"
 }
 
 local PromptTable = {
