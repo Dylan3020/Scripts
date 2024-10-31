@@ -98,7 +98,7 @@ local Options = getgenv().Linoria.Options
 local Toggles = getgenv().Linoria.Toggles
 
 local Window = Library:CreateWindow({
-	Title = "mspaint.lua",
+	Title = "DOORS: Rooms+",
 	Center = true,
 	AutoShow = true,
 	Resizable = true,
@@ -118,7 +118,7 @@ local Tabs = {
 --// Functions \\--
 
 function Script.Functions.Warn(message: string)
-    warn("WARN - mspaint:", message)
+    warn("WARN - DOORS:", message)
 end
 
 function Script.Functions.ESP(args: ESP)
@@ -379,7 +379,7 @@ function Script.Functions.ChildCheck(child, includeESP)
             child:WaitForChild("Hitbox", 5).CanTouch = false
         end
 
-        if child.Name == "GoldPile_Medium" or child.Name == "Goldpile_Large" or child.Name == "Goldpile_Big" or child.Name == "GoldPile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
+        if child.Name == "GoldPile_Medium" or child.Name == "Goldpile_Large" or child.Name == "GoldPile_Big" or child.Name == "GoldPile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
             Script.Functions.GoldESP(child)
         end
     elseif child:IsA("BasePart") then
@@ -557,7 +557,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Play Again",
         Func = function()
-            remotesFolder.BludTrippin2:FireServer()
+            remotesFolder.BludTrippin2:Fire()
         end,
         DoubleClick = true
     })
@@ -1127,8 +1127,8 @@ SaveManager:IgnoreThemeSettings()
 
 SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
 
-ThemeManager:SetFolder("mspaint")
-SaveManager:SetFolder("mspaint/doors")
+ThemeManager:SetFolder("doorsrooms")
+SaveManager:SetFolder("doorsrooms/rooms")
 
 SaveManager:BuildConfigSection(Tabs["UI Settings"])
 
