@@ -374,10 +374,11 @@ function Script.Functions.ChildCheck(child, includeESP)
                 Script.Functions.ItemESP(child)
             end
         end
+
         if child.Name == "GiggleCeiling" and Toggles.AntiGiggle.Value then
             child:WaitForChild("Hitbox", 5).CanTouch = false
         end
-		
+
         if child.Name == "GoldPile_Medium" or child.Name == "Goldpile_Large" or child.Name == "Goldpile_Big" or child.Name == "Goldpile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
             Script.Functions.GoldESP(child)
         end
@@ -554,7 +555,7 @@ end
 
 local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
-        Text = "Reset",
+        Text = "Play Again",
         Func = function()
             remotesFolder.BludTrippin2:FireServer()
         end,
@@ -572,10 +573,6 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
 
     AntiEntityGroupBox:AddToggle("AntiScreech", {
         Text = "Anti-Screech",
-        Default = false
-    })
-    AntiEntityGroupBox:AddToggle("AntiEyes", {
-        Text = "Anti-" .. (isBackdoor and "Lookman" or "Eyes"),
         Default = false
     })
 end
@@ -811,12 +808,6 @@ Toggles.AntiScreech:OnChanged(function(value)
         module.Name = value and "_Screech" or "Screech"
     end
 end)
-
-Toggles.AntiEyes:OnChanged(function(value) 
-    (workspace:FindFirstChild("LookmanNew") or workspace:FindFirstChild("BackdoorLookmanNew")) then
-            remotesFolder.MotorReplication:FireServer(-650)
-        end
-    end)
 
 Toggles.SpeedBypass:OnChanged(function(value)
     if value then
