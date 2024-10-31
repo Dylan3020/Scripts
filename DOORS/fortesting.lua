@@ -567,7 +567,7 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
     })
 	
     AntiEntityGroupBox:AddToggle("AntiEyes", {
-        Text = "Anti-" .. (isBackdoor and "Lookman" or "Eyes"),
+        Text = "Anti-" .. (isBackdoor and "BackdoorLookmanNew" or "LookmanNew"),
         Default = false
     })
 end
@@ -1050,7 +1050,7 @@ Library:GiveSignal(RunService.RenderStepped:Connect(function()
             end
         end
 
-        if Toggles.AntiEyes.Value and workspace:FindFirstChild("Eyes") then
+        if Toggles.AntiEyes.Value and workspace:FindFirstChild("LookmanNew") then
             -- lsplash meanie for removing other args in motorreplication
             remotesFolder.MotorReplication:FireServer(-650)
         end
