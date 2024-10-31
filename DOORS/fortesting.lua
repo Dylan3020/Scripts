@@ -102,6 +102,7 @@ local Window = Library:CreateWindow({
 	Center = true,
 	AutoShow = true,
 	Resizable = true,
+	NotifySide = "Right",
 	ShowCustomCursor = true,
 	TabPadding = 6,
 	MenuFadeTime = 0
@@ -662,18 +663,27 @@ local AmbientGroupBox = Tabs.Visuals:AddRightGroupbox("Ambient") do
     })
 end
 
-local NotifyTabBox = Tabs.Visuals:AddRightTabbox() do
-    local NotifyTab = NotifyTabBox:AddTab("Notifier") do
-        NotifyTab:AddToggle("NotifyEntity", {
-            Text = "Notify Entity",
+local NotifySettingsTab = NotifyTabBox:AddTab("Settings") do
+    NotifySettingsTab:AddToggle("NotifyChat", {
+            Text = "Notify Chat",
+            Tooltip = "Entity",
             Default = false,
         })
-    end
-
+	
+	NotifySettingsTab:AddDivider()
+	
     local NotifySettingsTab = NotifyTabBox:AddTab("Settings") do
         NotifySettingsTab:AddToggle("NotifySound", {
             Text = "Play Alert Sound",
             Default = true,
+				
+    NotifySettingsTab:AddDropdown("NotifySide", {
+            AllowNull = false,
+            Values = {"Left", "Right"},
+            Default = "Right",
+            Multi = false,
+
+            Text = "Notification Side"
         })
     end
 end
@@ -790,7 +800,12 @@ Options.PromptReachMultiplier:OnChanged(function(value)
         end
     end
 end)
-
+		
+Options.NotifySide:OnChanged(function(value)
+    print("changing to side", value)
+    Library.NotifySide = value
+end)
+		
 Toggles.AntiHalt:OnChanged(function(value)
     if not entityModules then return end
     local module = entityModules:FindFirstChild("Shade") or entityModules:FindFirstChild("_Shade")
