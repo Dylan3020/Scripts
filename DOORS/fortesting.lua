@@ -19,8 +19,8 @@ local Script = {
     Functions = {}
 }
 
-local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The KillerMoving", "A60Moving", "A120Moving"}
-local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "Snare"}
+local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The KillerMoving", "Josh HutchersonMoving", "werid entityMoving", "ContentMoving", "PandemoniumMoving", "AnglerMoving", "FrogerMoving", "eyeMoving", "scaryfaceMoving", "CustomMoving", "Ambush_ModifierMoving", "TrollfaceMoving", "SeekMoving", "A60Moving", "A120Moving"}
+local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "Landmine"}
 local ShortNames = {
     ["BlitzMoving"] = "Blitz",
     ["BackdoorLookmanNew"] = "Lookman",
@@ -102,7 +102,6 @@ local Window = Library:CreateWindow({
 	Center = true,
 	AutoShow = true,
 	Resizable = true,
-	NotifySide = "Right",
 	ShowCustomCursor = true,
 	TabPadding = 6,
 	MenuFadeTime = 0
@@ -473,7 +472,7 @@ function Script.Functions.GetShortName(entityName: string)
         return ShortNames[entityName]
     end
 
-    return tostring(entityName):gsub("Backdoor", ""):gsub("Ceiling", ""):gsub("Moving", ""):gsub("Ragdoll", ""):gsub("Rig", ""):gsub("Wall", ""):gsub("Pack", " Pack")
+    return tostring(entityName):gsub("Backdoor", ""):gsub("Ceiling", ""):gsub("Moving", ""):gbsub("_Modifier", ""):gsub("Ragdoll", ""):gsub("Rig", ""):gsub("Wall", ""):gsub("Pack", " Pack")
 end
 
 function Script.Functions.DistanceFromCharacter(position: Instance | Vector3)
@@ -482,19 +481,6 @@ function Script.Functions.DistanceFromCharacter(position: Instance | Vector3)
     end
 
     return (rootPart.Position - position).Magnitude
-end
-
-function Script.Functions.DisableDupe(dupeRoom, value)
-    local doorFake = dupeRoom:WaitForChild("DoorFake", 5)
-
-    if doorFake then
-        doorFake:WaitForChild("Hidden", 5).CanTouch = not value
-
-        local lock = doorFake:WaitForChild("LockPart", 5)
-        if lock and lock:FindFirstChild("UnlockPrompt") then
-            lock.UnlockPrompt.Enabled = not value
-        end
-    end
 end
 
 function Script.Functions.Alert(message: string, time_obj: number)
@@ -663,27 +649,18 @@ local AmbientGroupBox = Tabs.Visuals:AddRightGroupbox("Ambient") do
     })
 end
 
-local NotifySettingsTab = NotifyTabBox:AddTab("Settings") do
-    NotifySettingsTab:AddToggle("NotifyChat", {
-            Text = "Notify Chat",
-            Tooltip = "Entity",
+local NotifyTabBox = Tabs.Visuals:AddRightTabbox() do
+    local NotifyTab = NotifyTabBox:AddTab("Notifier") do
+        NotifyTab:AddToggle("NotifyEntity", {
+            Text = "Notify Entity",
             Default = false,
         })
-	
-	NotifySettingsTab:AddDivider()
-	
+    end
+
     local NotifySettingsTab = NotifyTabBox:AddTab("Settings") do
         NotifySettingsTab:AddToggle("NotifySound", {
             Text = "Play Alert Sound",
             Default = true,
-				
-    NotifySettingsTab:AddDropdown("NotifySide", {
-            AllowNull = false,
-            Values = {"Left", "Right"},
-            Default = "Right",
-            Multi = false,
-
-            Text = "Notification Side"
         })
     end
 end
@@ -800,12 +777,7 @@ Options.PromptReachMultiplier:OnChanged(function(value)
         end
     end
 end)
-		
-Options.NotifySide:OnChanged(function(value)
-    print("changing to side", value)
-    Library.NotifySide = value
-end)
-		
+
 Toggles.AntiHalt:OnChanged(function(value)
     if not entityModules then return end
     local module = entityModules:FindFirstChild("Shade") or entityModules:FindFirstChild("_Shade")
