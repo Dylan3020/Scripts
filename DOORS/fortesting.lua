@@ -565,11 +565,6 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
         Text = "Anti-Screech",
         Default = false
     })
-	
-    AntiEntityGroupBox:AddToggle("AntiEyes", {
-        Text = "Anti-" .. (isBackdoor and "BackdoorLookmanNew" or "LookmanNew"),
-        Default = false
-    })
 end
 
 local BypassGroupBox = Tabs.Exploits:AddRightGroupbox("Bypass") do
@@ -803,13 +798,6 @@ Toggles.AntiScreech:OnChanged(function(value)
         module.Name = value and "_Screech" or "Screech"
     end
 end)
-
-Toggles.AntiEyes.Value and workspace:FindFirstChild("LookmanNew") then
-            -- lsplash meanie for removing other args in motorreplication
-            remotesFolder.MotorReplication:FireServer(-650)
-        end
-    end
-end))
 
 Toggles.SpeedBypass:OnChanged(function(value)
     if value then
