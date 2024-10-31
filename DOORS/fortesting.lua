@@ -379,7 +379,7 @@ function Script.Functions.ChildCheck(child, includeESP)
             child:WaitForChild("Hitbox", 5).CanTouch = false
         end
 
-        if child.Name == "GoldPile_Medium" or child.Name == "Goldpile_Large" or child.Name == "Goldpile_Big" or child.Name == "Goldpile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
+        if child.Name == "GoldPile_Medium" or child.Name == "Goldpile_Large" or child.Name == "Goldpile_Big" or child.Name == "GoldPile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
             Script.Functions.GoldESP(child)
         end
     elseif child:IsA("BasePart") then
