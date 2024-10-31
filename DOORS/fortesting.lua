@@ -374,11 +374,6 @@ function Script.Functions.ChildCheck(child, includeESP)
                 Script.Functions.ItemESP(child)
             end
         end
-            if Toggles.AntiEyes.Value and (workspace:FindFirstChild("LookmanNew") or workspace:FindFirstChild("BackdoorLookmanNew")) then
-               remotesFolder.MotorReplication:FireServer(-650)
-           end
-        end
-	
         if child.Name == "GiggleCeiling" and Toggles.AntiGiggle.Value then
             child:WaitForChild("Hitbox", 5).CanTouch = false
         end
@@ -561,7 +556,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Reset",
         Func = function()
-            game.Players.LocalPLayer.Character.Humanoid.Health = 0
+            remotesFolder.BludTrippin2:FireServer()
         end,
         DoubleClick = true
     })
@@ -816,6 +811,12 @@ Toggles.AntiScreech:OnChanged(function(value)
         module.Name = value and "_Screech" or "Screech"
     end
 end)
+
+Toggles.AntiEyes:OnChanged(function(value) 
+    (workspace:FindFirstChild("LookmanNew") or workspace:FindFirstChild("BackdoorLookmanNew")) then
+            remotesFolder.MotorReplication:FireServer(-650)
+        end
+    end)
 
 Toggles.SpeedBypass:OnChanged(function(value)
     if value then
