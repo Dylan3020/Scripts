@@ -383,7 +383,7 @@ function Script.Functions.ChildCheck(child, includeESP)
             Script.Functions.DisableDupe(child, true)
         end
 
-        if child.Name == "GoldPile_Medium" or if child.Name == "Golpile_Large" or if child.Name == "Goldpile_Big" or if child.Name == "Goldpile_Small" or if child.Name == "GoldPile_WorthLess" or if child.Name == "GoldPile_Bar" if child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
+        if child.Name == "GoldPile_Medium" or child.Name == "Golpile_Large" or child.Name == "Goldpile_Big" or child.Name == "Goldpile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
             Script.Functions.GoldESP(child)
         end
     elseif child:IsA("BasePart") then
