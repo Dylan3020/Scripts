@@ -219,7 +219,7 @@ function Script.Functions.ESP(args: ESP)
 end
 
 function Script.Functions.DoorESP(room)
-    local door = room:WaitForChild("Door")
+    local door = room:WaitForChild("door")
     local locked = room:GetAttribute("RequiresKey")
 
     if door and not door:GetAttribute("Opened") then
