@@ -565,6 +565,11 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
         Text = "Anti-Screech",
         Default = false
     })
+	
+    AntiEntityGroupBox:AddToggle("AntiEyes", {
+        Text = "Anti-" .. (isBackdoor and "Lookman" or "Eyes"),
+        Default = false
+    })
 end
 
 local BypassGroupBox = Tabs.Exploits:AddRightGroupbox("Bypass") do
@@ -1043,6 +1048,11 @@ Library:GiveSignal(RunService.RenderStepped:Connect(function()
             if door and door:FindFirstChild("ClientOpen") then
                 door.ClientOpen:FireServer()
             end
+        end
+
+        if Toggles.AntiEyes.Value and workspace:FindFirstChild("Eyes") then
+            -- lsplash meanie for removing other args in motorreplication
+            remotesFolder.MotorReplication:FireServer(-650)
         end
     end
 end))
