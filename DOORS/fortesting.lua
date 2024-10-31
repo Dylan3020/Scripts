@@ -28,6 +28,8 @@ local ShortNames = {
     ["Josh HutchersonMoving"] = "Josh Hutcherson",
     ["werid entityMoving"] = "werid entity",
     ["Landmine"] = "Snare",
+    ["A60Moving"] = "A-60",
+    ["A120Moving"] = "A-120",
     ["Jeff The KillerMoving"] = "Jeff The Killer"
 }
 
@@ -508,7 +510,7 @@ local PlayerGroupBox = Tabs.Main:AddLeftGroupbox("Player") do
         Text = "Speed Boost",
         Default = 0,
         Min = 0,
-        Max = 7,
+        Max = 69,
         Rounding = 1
     })
 
@@ -523,13 +525,8 @@ local PlayerGroupBox = Tabs.Main:AddLeftGroupbox("Player") do
     })
 end
 
-local ReachGroupBox = Tabs.Main:AddLeftGroupbox("Reach") do
-    ReachGroupBox:AddToggle("DoorReach", {
-        Text = "Door Reach",
-        Default = false
-    })
-
-    ReachGroupBox:AddToggle("PromptClip", {
+local  ReachGroupBox = Tabs.Main:AddLeftGroupbox("Reach") do
+	ReachGroupBox:AddToggle("PromptClip", {
         Text = "Prompt Clip",
         Default = false
     })
@@ -1035,14 +1032,6 @@ Library:GiveSignal(RunService.RenderStepped:Connect(function()
         end
         if character:FindFirstChild("LowerTorso") then
             character.LowerTorso.CanCollide = not Toggles.Noclip.Value
-        end
-
-        if Toggles.DoorReach.Value and workspace.CurrentRooms:FindFirstChild(latestRoom.Value) then
-            local door = workspace.CurrentRooms[latestRoom.Value]:FindFirstChild("Door")
-
-            if door and door:FindFirstChild("ClientOpen") then
-                door.ClientOpen:FireServer()
-            end
         end
     end
 end))
