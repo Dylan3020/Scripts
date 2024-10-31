@@ -374,16 +374,16 @@ function Script.Functions.ChildCheck(child, includeESP)
                 Script.Functions.ItemESP(child)
             end
         end
-
+            if Toggles.AntiEyes.Value and (workspace:FindFirstChild("LookmanNew") or workspace:FindFirstChild("BackdoorLookmanNew")) then
+               remotesFolder.MotorReplication:FireServer(-650)
+           end
+        end
+	
         if child.Name == "GiggleCeiling" and Toggles.AntiGiggle.Value then
             child:WaitForChild("Hitbox", 5).CanTouch = false
         end
-
-        if child:GetAttribute("LoadModule") == "DupeRoom" and Toggles.AntiDupe.Value then
-            Script.Functions.DisableDupe(child, true)
-        end
-
-        if child.Name == "GoldPile_Medium" or child.Name == "Golpile_Large" or child.Name == "Goldpile_Big" or child.Name == "Goldpile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
+		
+        if child.Name == "GoldPile_Medium" or child.Name == "Goldpile_Large" or child.Name == "Goldpile_Big" or child.Name == "Goldpile_Small" or child.Name == "GoldPile_WorthLess" or child.Name == "GoldPile_Bar" or child.Name == "GoldPile_VeryLarge" and Toggles.GoldESP.Value then
             Script.Functions.GoldESP(child)
         end
     elseif child:IsA("BasePart") then
@@ -559,9 +559,9 @@ end
 
 local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
-        Text = "Play Again",
+        Text = "Reset",
         Func = function()
-            remotesFolder.PlayAgain:FireServer()
+            game.Players.LocalPLayer.Character.Humanoid.Health = 0
         end,
         DoubleClick = true
     })
@@ -579,9 +579,8 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
         Text = "Anti-Screech",
         Default = false
     })
-
-    AntiEntityGroupBox:AddToggle("AntiDupe", {
-        Text = "Anti-Dupe",
+    AntiEntityGroupBox:AddToggle("AntiEyes", {
+        Text = "Anti-" .. (isBackdoor and "Lookman" or "Eyes"),
         Default = false
     })
 end
@@ -815,16 +814,6 @@ Toggles.AntiScreech:OnChanged(function(value)
 
     if module then
         module.Name = value and "_Screech" or "Screech"
-    end
-end)
-
-Toggles.AntiDupe:OnChanged(function(value)
-    for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
-        for _, dupeRoom in pairs(room:GetChildren()) do
-            if dupeRoom:GetAttribute("LoadModule") == "DupeRoom" then
-                Script.Functions.DisableDupe(dupeRoom, value)
-            end
-        end
     end
 end)
 
