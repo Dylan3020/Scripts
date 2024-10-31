@@ -27,6 +27,7 @@ local ShortNames = {
     ["LookmanNew"] = "Eyes",
     ["Josh HutchersonMoving"] = "Josh Hutcherson",
     ["werid entityMoving"] = "werid entity",
+    ["Landmine"] = "Snare",
     ["Jeff The KillerMoving"] = "Jeff The Killer"
 }
 
