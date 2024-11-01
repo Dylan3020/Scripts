@@ -1004,6 +1004,14 @@ Library:GiveSignal(playerGui.ChildAdded:Connect(function(child)
                             module.Name = "_Screech"
                         end
                     end
+                    if (isRooms) and Toggles.AntiA90.Value then
+                            local module = modules:FindFirstChild("A90", true)
+    
+                            if module then
+                                module.Name = "_A90"
+                            end
+                        end
+                    end
                 end
             end
         end)
