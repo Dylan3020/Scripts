@@ -19,14 +19,12 @@ local Script = {
     Functions = {}
 }
 
-local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The KillerMoving", "Josh HutchersonMoving", "werid entityMoving", "ContentMoving", "PandemoniumMoving", "AnglerMoving", "FrogerMoving", "eyeMoving", "scaryfaceMoving", "CustomMoving", "Ambush_ModifierMoving", "TrollfaceMoving", "SeekMoving", "A60Moving", "A120Moving"}
-local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "ContentLocal", "PandemoniumLocal", "Landmine"}
+local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The KillerMoving", "ContentMoving", "PandemoniumMoving", "eyeMoving", "scaryfaceMoving", "CustomMoving", "Ambush_ModifierMoving", "TrollfaceMoving", "SeekMoving", "A60Moving", "A120Moving"}
+local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "Landmine"}
 local ShortNames = {
     ["BlitzMoving"] = "Blitz",
     ["BackdoorLookmanNew"] = "Lookman",
     ["LookmanNew"] = "Eyes",
-    ["Josh HutchersonMoving"] = "Josh Hutcherson",
-    ["werid entityMoving"] = "werid entity",
     ["Landmine"] = "Snare",
     ["A60Moving"] = "A-60",
     ["A120Moving"] = "A-120",
