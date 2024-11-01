@@ -107,8 +107,9 @@ local Window = Library:CreateWindow({
 	Center = true,
 	AutoShow = true,
 	Resizable = true,
+    NotifySide = "Right",
 	ShowCustomCursor = true,
-	TabPadding = 6,
+	TabPadding = 2,
 	MenuFadeTime = 0
 })
 
@@ -667,6 +668,15 @@ local NotifyTabBox = Tabs.Visuals:AddRightTabbox() do
             Text = "Play Alert Sound",
             Default = true,
         })
+
+        NotifySettingsTab:AddDropdown("NotifySide", {
+            AllowNull = false,
+            Values = {"Left", "Right"},
+            Default = "Right",
+            Multi = false,
+
+            Text = "Notification Side"
+        })
     end
 end
 
@@ -808,6 +818,11 @@ Toggles.AntiA90:OnChanged(function(value)
     if module then
         module.Name = value and "_A90" or "A90"
     end
+end)
+
+Options.NotifySide:OnChanged(function(value)
+    print("changing to side", value)
+    Library.NotifySide = value
 end)
 
 Toggles.SpeedBypass:OnChanged(function(value)
