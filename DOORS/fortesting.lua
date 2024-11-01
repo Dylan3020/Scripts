@@ -20,7 +20,7 @@ local Script = {
 }
 
 local EntityName = {"BlitzMoving", "BackdoorLookmanNew", "RushMoving", "AmbushMoving", "LookmanNew", "Screech", "Halt", "Jeff The KillerMoving", "Josh HutchersonMoving", "werid entityMoving", "ContentMoving", "PandemoniumMoving", "AnglerMoving", "FrogerMoving", "eyeMoving", "scaryfaceMoving", "CustomMoving", "Ambush_ModifierMoving", "TrollfaceMoving", "SeekMoving", "A60Moving", "A120Moving"}
-local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "Landmine"}
+local SideEntityName = {"FigureRagdoll", "GiggleCeiling", "GrumbleRig", "ContentLocal", "PandemoniumLocal". "Landmine"}
 local ShortNames = {
     ["BlitzMoving"] = "Blitz",
     ["BackdoorLookmanNew"] = "Lookman",
@@ -428,35 +428,8 @@ function Script.Functions.SetupRoomConnection(room)
 
     room.DescendantAdded:Connect(function(child)
         task.delay(0.1, Script.Functions.ChildCheck, child, true)
-    end)
-end
-
-function Script.Functions.SetupCharacterConnection(newCharacter)
-    character = newCharacter
-
-    humanoid = character:WaitForChild("Humanoid")
-
-    if humanoid then
-        Script.Connections["Jump"] = humanoid:GetPropertyChangedSignal("JumpHeight"):Connect(function()
-            if not Toggles.SpeedBypass.Value and latestRoom.Value < 99 then
-                if humanoid.JumpHeight > 0 then
-                    lastSpeed = Options.SpeedSlider.Value
-                    Options.SpeedSlider:SetMax(3)
-                elseif lastSpeed > 0 then
-                    Options.SpeedSlider:SetMax(7)
-                    Options.SpeedSlider:SetValue(lastSpeed)
-                    lastSpeed = 0
-                end
-            end
-        end)
-
-        Script.Connections["Died"] = humanoid.Died:Connect(function()
-            if collisionClone then
-                collisionClone:Destroy()
-            end
-        end)
     end
-
+    
     rootPart = character:WaitForChild("HumanoidRootPart")
 
     collision = character:WaitForChild("Collision")
@@ -507,14 +480,6 @@ end
 print("reached main")
 
 local PlayerGroupBox = Tabs.Main:AddLeftGroupbox("Player") do
-    PlayerGroupBox:AddSlider("SpeedSlider", {
-        Text = "Speed Boost",
-        Default = 0,
-        Min = 0,
-        Max = 69,
-        Rounding = 1
-    })
-
     PlayerGroupBox:AddToggle("Noclip", {
         Text = "Noclip",
         Default = false
@@ -569,14 +534,6 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
             Default = false
     })
 end
-
-local BypassGroupBox = Tabs.Exploits:AddRightGroupbox("Bypass") do
-    BypassGroupBox:AddToggle("SpeedBypass", {
-        Text = "Speed Bypass",
-        Default = false
-    })
-end
-
 
 --// Visuals \\--
 
@@ -825,20 +782,6 @@ Options.NotifySide:OnChanged(function(value)
     Library.NotifySide = value
 end)
 
-Toggles.SpeedBypass:OnChanged(function(value)
-    if value then
-        Options.SpeedSlider:SetMax(30)
-
-        while Toggles.SpeedBypass.Value and collisionClone do
-            collisionClone.Massless = not collisionClone.Massless
-            task.wait(0.225)
-        end
-    else
-        Options.SpeedSlider:SetMax(7)
-        if collisionClone then collisionClone.Massless = true end
-    end
-end)
-
 Toggles.DoorESP:OnChanged(function(value)
     if value then
         for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
@@ -1043,16 +986,7 @@ Library:GiveSignal(RunService.RenderStepped:Connect(function()
         if Toggles.NoCamShake.Value then
             mainGameSrc.csgo = CFrame.new()
         end
-    end
-
-    if character then
-        if isMines and Toggles.FastLadder.Value and character:GetAttribute("Climbing") then
-            character:SetAttribute("SpeedBoostBehind", 500)
-        else
-            character:SetAttribute("SpeedBoostBehind", Options.SpeedSlider.Value)
-        end
         
-
         if rootPart then
             rootPart.CanCollide = not Toggles.Noclip.Value
         end
@@ -1080,10 +1014,6 @@ task.spawn(Script.Functions.SetupCharacterConnection, character)
 --// Library Load \\--
 
 Library:OnUnload(function()
-    if character then
-        character:SetAttribute("SpeedBoostBehind", 0)
-    end
-
     if alive then
         Lighting.Ambient = workspace.CurrentRooms[localPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient")
     else
