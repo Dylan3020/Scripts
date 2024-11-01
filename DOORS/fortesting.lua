@@ -810,7 +810,6 @@ Toggles.AntiA90:OnChanged(function(value)
     end
 end)
 
-
 Toggles.SpeedBypass:OnChanged(function(value)
     if value then
         Options.SpeedSlider:SetMax(30)
@@ -998,7 +997,7 @@ Library:GiveSignal(playerGui.ChildAdded:Connect(function(child)
                     if not mainGame:WaitForChild("RemoteListener", 5) then return end
 
                     if Toggles.AntiScreech.Value then
-                        local module = mainGame:FindFirstChild("Screech", true)
+                        local module = modules:FindFirstChild("Screech", true)
 
                         if module then
                             module.Name = "_Screech"
@@ -1006,11 +1005,10 @@ Library:GiveSignal(playerGui.ChildAdded:Connect(function(child)
                     end
 								
                     if (isHotel or isRooms) and Toggles.AntiA90.Value then
-                            local module = modules:FindFirstChild("A90", true)
-    
-                            if module then
-                                module.Name = "_A90"
-                            end
+                        local module = modules:FindFirstChild("A90", true)
+
+                        if module then
+                            module.Name = "_A90"
                         end
                     end
                 end
