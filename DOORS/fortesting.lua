@@ -230,7 +230,7 @@ function Script.Functions.DoorESP(room)
     if door and not door:GetAttribute("Opened") then
         local doorEsp = Script.Functions.ESP({
             Type = "Door",
-            Object = door:WaitForChild("door"),
+            Object = door:WaitForChild("Door"),
             Text = locked and string.format("Door %s [Locked]", room.Name + 1) or string.format("Door %s", room.Name + 1),
             Color = Options.DoorEspColor.Value
         })
