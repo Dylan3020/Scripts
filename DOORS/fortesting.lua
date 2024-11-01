@@ -562,6 +562,11 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
         Text = "Anti-Screech",
         Default = false
     })
+
+    AntiEntityGroupBox:AddToggle("AntiA90", {
+            Text = "Anti-A90",
+            Default = false
+    })
 end
 
 local BypassGroupBox = Tabs.Exploits:AddRightGroupbox("Bypass") do
@@ -795,6 +800,16 @@ Toggles.AntiScreech:OnChanged(function(value)
         module.Name = value and "_Screech" or "Screech"
     end
 end)
+
+Toggles.AntiA90:OnChanged(function(value)
+    if not mainGame then return end
+    local module = mainGame:FindFirstChild("A90", true) or mainGame:FindFirstChild("_A90", true)
+
+    if module then
+        module.Name = value and "_A90" or "A90"
+    end
+end)
+
 
 Toggles.SpeedBypass:OnChanged(function(value)
     if value then
