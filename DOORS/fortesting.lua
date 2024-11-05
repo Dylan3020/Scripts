@@ -678,20 +678,6 @@ local NotifyTabBox = Tabs.Visuals:AddRightTabbox() do
     end
 end
 
-local SelfGroupBox = Tabs.Visuals:AddRightGroupbox("Self") do
-    SelfGroupBox:AddSlider("FOV", {
-        Text = "Field of View",
-        Default = 70,
-        Min = 70,
-        Max = 120,
-        Rounding = 0
-    })
-    
-    SelfGroupBox:AddToggle("NoCamShake", {
-        Text = "No Camera Shake",
-        Default = false,
-    })
-end
 
 
 --// Floor \\--
@@ -1040,15 +1026,6 @@ end))
 Library:GiveSignal(Lighting:GetPropertyChangedSignal("Ambient"):Connect(function()
     if Toggles.Fullbright.Value then
         Lighting.Ambient = Color3.new(1, 1, 1)
-    end
-end))
-
-Library:GiveSignal(RunService.RenderStepped:Connect(function()
-    if mainGameSrc then
-        mainGameSrc.fovtarget = Options.FOV.Value
-
-        if Toggles.NoCamShake.Value then
-            mainGameSrc.csgo = CFrame.new()
         end
     end
 
@@ -1111,10 +1088,6 @@ Library:OnUnload(function()
         if module then
             module.Name = "Screech"
         end
-    end
-
-    if mainGameSrc then
-        mainGameSrc.fovtarget = 70
     end
 
     if collision then
