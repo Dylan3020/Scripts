@@ -568,13 +568,6 @@ local AntiEntityGroupBox = Tabs.Exploits:AddLeftGroupbox("Anti-Entity") do
     })
 end
 
-local BypassGroupBox = Tabs.Exploits:AddRightGroupbox("Bypass") do
-    BypassGroupBox:AddToggle("SpeedBypass", {
-        Text = "Speed Bypass",
-        Default = false
-    })
-end
-
 
 --// Visuals \\--
 
@@ -816,19 +809,6 @@ Options.NotifySide:OnChanged(function(value)
     Library.NotifySide = value
 end)
 
-Toggles.SpeedBypass:OnChanged(function(value)
-    if value then
-        Options.SpeedSlider:SetMax(30)
-
-        while Toggles.SpeedBypass.Value and collisionClone do
-            collisionClone.Massless = not collisionClone.Massless
-            task.wait(0.225)
-        end
-    else
-        Options.SpeedSlider:SetMax(7)
-        if collisionClone then collisionClone.Massless = true end
-    end
-end)
 
 Toggles.DoorESP:OnChanged(function(value)
     if value then
@@ -1026,7 +1006,6 @@ end))
 Library:GiveSignal(Lighting:GetPropertyChangedSignal("Ambient"):Connect(function()
     if Toggles.Fullbright.Value then
         Lighting.Ambient = Color3.new(1, 1, 1)
-        end
     end
 
     if character then
