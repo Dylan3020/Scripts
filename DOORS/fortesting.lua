@@ -372,6 +372,14 @@ function Script.Functions.ChildCheck(child, includeESP)
         end
     end
 
+    if Toggles.AutoInteract.Value and (Library.IsMobile or Options.AutoInteractKey:GetState()) then
+        local prompts = Script.Functions.GetAllPromptsWithCondition(function(prompt)
+            if isRetro and prompt.Parent.Parent.Name == "RetroWardrobe" then
+                return false
+            end
+            return true
+        end)
+
     if child:IsA("Model") then
         if (child:GetAttribute("Pickup") or child:GetAttribute("PropType")) and not child:GetAttribute("FuseID") then
             if Toggles.ItemESP.Value then
@@ -469,6 +477,18 @@ end
 --// Main \\--
  
 print("reached main")
+
+local AutomationGroupBox = Tabs.Main:AddRightGroupbox("Automation") do
+    AutomationGroupBox:AddToggle("AutoInteract", {
+        Text = "Auto Interact",
+        Default = false
+    }):AddKeyPicker("AutoInteractKey", {
+        Mode = Library.IsMobile and "Toggle" or "Hold",
+        Default = "R",
+        Text = "Auto Interact",
+        SyncToggleState = Library.IsMobile
+    })
+end
 
 local PlayerGroupBox = Tabs.Main:AddLeftGroupbox("Player") do
     PlayerGroupBox:AddToggle("Noclip", {
