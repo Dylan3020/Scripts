@@ -457,7 +457,7 @@ function Script.Functions.Alert(message: string, time_obj: number)
     if Toggles.NotifySound.Value then
         local sound = Instance.new("Sound", workspace) do
             sound.SoundId = "rbxassetid://4590662766"
-            sound.Volume = 10
+            sound.Volume = 5
             sound.PlayOnRemove = true
             sound:Destroy()
         end
