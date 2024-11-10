@@ -32,61 +32,26 @@ local ShortNames = {
 }
 
 local PromptTable = {
-    GamePrompts = {},
-
-    Aura = {
-        ["ActivateEventPrompt"] = false,
-        ["AwesomePrompt"] = true,
-        ["FusesPrompt"] = true,
-        ["HerbPrompt"] = false,
-        ["LeverPrompt"] = true,
-        ["LootPrompt"] = false,
-        ["ModulePrompt"] = true,
-        ["SkullPrompt"] = false,
-        ["UnlockPrompt"] = true,
-        ["ValvePrompt"] = false,
-        ["PropPrompt"] = true
-    },
-    AuraObjects = {
-        "Lock",
-        "Button"
-    },
-
     Clip = {
-        "AwesomePrompt",
-        "FusesPrompt",
         "HerbPrompt",
         "HidePrompt",
         "LeverPrompt",
         "LootPrompt",
-        "ModulePrompt",
         "Prompt",
-        "PushPrompt",
         "SkullPrompt",
         "UnlockPrompt",
-        "ValvePrompt"
     },
-    ClipObjects = {
-        "LeverForGate",
+
+    Objects = {
+        "LeverModel",
         "LiveBreakerPolePickup",
         "LiveHintBook",
         "Button",
     },
 
     Excluded = {
-        Prompt = {
-            "HintPrompt",
-            "InteractPrompt"
-        },
-
-        Parent = {
-            "KeyObtainFake",
-            "Padlock"
-        },
-
-        ModelAncestor = {
-            "DoorFake"
-        }
+        "HintPrompt",
+        "InteractPrompt"
     }
 }
 
@@ -380,154 +345,30 @@ function Script.Functions.ObjectiveESPCheck(child)
     end
 end
 
---//prompt shit--//
+function Script.Functions.ChildCheck(child, includeESP)
+    if child:IsA("ProximityPrompt") then
+        if not child:GetAttribute("Hold") then child:SetAttribute("Hold", child.HoldDuration) end
+        if not child:GetAttribute("Distance") then child:SetAttribute("Distance", child.MaxActivationDistance) end
+        if not child:GetAttribute("Enabled") then child:SetAttribute("Enabled", child.Enabled) end
+        if not child:GetAttribute("Clip") then child:SetAttribute("Clip", child.RequiresLineOfSight) end
 
-    function Script.Functions.IsPromptInRange(prompt: ProximityPrompt)
-        return Script.Functions.DistanceFromCharacter(prompt:FindFirstAncestorWhichIsA("BasePart") or prompt:FindFirstAncestorWhichIsA("Model") or prompt.Parent) <= prompt.MaxActivationDistance
-    end
-    
-    function Script.Functions.GetNearestAssetWithCondition(condition: () -> ())
-        local nearestDistance = math.huge
-        local nearest
-        for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
-            if not room:FindFirstChild("Assets") then continue end
-    
-            for i, v in pairs(room.Assets:GetChildren()) do
-                if condition(v) and Script.Functions.DistanceFromCharacter(v) < nearestDistance then
-                    nearestDistance = Script.Functions.DistanceFromCharacter(v)
-                    nearest = v
-                end
-            end
+        child.MaxActivationDistance = child:GetAttribute("Distance") * Options.PromptReachMultiplier.Value
+
+        if Toggles.InstaInteract.Value then
+            child.HoldDuration = 0
         end
-    
-        return nearest
-    end
 
-    function Script.Functions.GetAllPromptsWithCondition(condition)
-        assert(typeof(condition) == "function", "Expected a function as condition argument but got " .. typeof(condition))
-        
-        local validPrompts = {}
-        for _, prompt in pairs(PromptTable.GamePrompts) do
-            if not prompt or not prompt:IsDescendantOf(workspace) then continue end
-    
-            local success, returnData = pcall(function()
-                return condition(prompt)
-            end)
-    
-            assert(success, "An error has occured while running condition function.\n" .. tostring(returnData))
-            assert(typeof(returnData) == "boolean", "Expected condition function to return a boolean")
-            
-            if returnData then
-                table.insert(validPrompts, prompt)
-            end
-        end
-    
-        return validPrompts
-    end
-    
-    function Script.Functions.GetNearestPromptWithCondition(condition)
-        local prompts = Script.Functions.GetAllPromptsWithCondition(condition)
-    
-        local nearestPrompt = nil
-        local oldHighestDistance = math.huge
-        for _, prompt in pairs(prompts) do
-            local promptParent = prompt:FindFirstAncestorWhichIsA("BasePart") or prompt:FindFirstAncestorWhichIsA("Model")
-    
-            if promptParent and Script.Functions.DistanceFromCharacter(promptParent) < oldHighestDistance then
-                nearestPrompt = prompt
-                oldHighestDistance = Script.Functions.DistanceFromCharacter(promptParent)
-            end
-        end
-    
-        return nearestPrompt
-    end
-end
+        if Toggles.PromptClip.Value and (table.find(PromptTable.Clip, child.Name) or table.find(PromptTable.Objects, child.Parent.Name)) then
+            child.RequiresLineOfSight = false
+            if child.Name == "ModulePrompt" then
+                child.Enabled = true
 
-function Script.Functions.PromptCondition(prompt)
-    local modelAncestor = prompt:FindFirstAncestorOfClass("Model")
-    return 
-        prompt:IsA("ProximityPrompt") and (
-            not table.find(PromptTable.Excluded.Prompt, prompt.Name) 
-            and not table.find(PromptTable.Excluded.Parent, prompt.Parent and prompt.Parent.Name or "") 
-            and not (table.find(PromptTable.Excluded.ModelAncestor, modelAncestor and modelAncestor.Name or ""))
-        )
-end
-
-function Script.Functions.ChildCheck(child)
-    if Script.Functions.PromptCondition(child) then
-        task.defer(function()
-            if not child:GetAttribute("Hold") then child:SetAttribute("Hold", child.HoldDuration) end
-            if not child:GetAttribute("Distance") then child:SetAttribute("Distance", child.MaxActivationDistance) end
-            if not child:GetAttribute("Enabled") then child:SetAttribute("Enabled", child.Enabled) end
-            if not child:GetAttribute("Clip") then child:SetAttribute("Clip", child.RequiresLineOfSight) end
-        end)
-
-        task.defer(function()
-            child.MaxActivationDistance = child:GetAttribute("Distance") * Options.PromptReachMultiplier.Value
-    
-            if Toggles.InstaInteract.Value then
-                child.HoldDuration = 0
-            end
-    
-            if Toggles.PromptClip.Value and Script.Functions.PromptCondition(child) then
-                child.RequiresLineOfSight = false
-            end
-        end)
-
-        table.insert(PromptTable.GamePrompts, child)
-    end
-
-    if Toggles.AutoInteract.Value and (Library.IsMobile or Options.AutoInteractKey:GetState()) then
-        local prompts = Script.Functions.GetAllPromptsWithCondition(function(prompt)
-            if isRetro and prompt.Parent.Parent.Name == "RetroWardrobe" then
-                return false
-            end
-
-            return PromptTable.Aura[prompt.Name] ~= nil
-        end)
-
-        for _, prompt: ProximityPrompt in pairs(prompts) do
-            if not prompt.Parent then continue end
-            if prompt.Parent:GetAttribute("JeffShop") then continue end
-            if prompt.Parent:GetAttribute("PropType") == "Battery" and ((character:FindFirstChildOfClass("Tool") and character:FindFirstChildOfClass("Tool"):GetAttribute("RechargeProp") ~= "Battery") or character:FindFirstChildOfClass("Tool") == nil) then continue end 
-            if prompt.Parent:GetAttribute("PropType") == "Heal" and humanoid and humanoid.Health == humanoid.MaxHealth then continue end
-
-            task.spawn(function()
-                -- checks if distance can interact with prompt and if prompt can be interacted again
-                if Script.Functions.DistanceFromCharacter(prompt.Parent) < prompt.MaxActivationDistance and (not prompt:GetAttribute("Interactions" .. localPlayer.Name) or PromptTable.Aura[prompt.Name] or table.find(PromptTable.AuraObjects, prompt.Parent.Name)) then
-                    -- painting checks
-                    if prompt.Parent.Name == "Slot" and prompt.Parent:GetAttribute("Hint") and character then
-                        if Script.Temp.PaintingDebounce then return end
-                        
-                        local currentPainting = character:FindFirstChild("Prop")
-                        if not currentPainting and prompt.Parent:FindFirstChild("Prop") and prompt.Parent:GetAttribute("Hint") ~= prompt.Parent.Prop:GetAttribute("Hint") then
-                            return firePrompt(prompt)
-                        end
-
-                        if prompt.Parent:FindFirstChild("Prop") then 
-                            if prompt.Parent:GetAttribute("Hint") == prompt.Parent.Prop:GetAttribute("Hint") then
-                                return
-                            end
-                        end
-
-                        if prompt.Parent:GetAttribute("Hint") == currentPainting:GetAttribute("Hint") then
-                            Script.Temp.PaintingDebounce = true
-
-                            local oldHint = currentPainting:GetAttribute("Hint")
-                            repeat task.wait()
-                                firePrompt(prompt)
-                            until not character:FindFirstChild("Prop") or character:FindFirstChild("Prop"):GetAttribute("Hint") ~= oldHint
-
-                            task.wait(0.15)
-                            Script.Temp.PaintingDebounce = false
-                        end                            
-                        
-                        return
+                child:GetPropertyChangedSignal("Enabled"):Connect(function()
+                    if Toggles.PromptClip.Value then
+                        child.Enabled = true
                     end
-                    
-                    firePrompt(prompt)
-                end
-            end)
+                end)
+            end
         end
     end
 
@@ -618,7 +459,7 @@ function Script.Functions.Alert(message: string, time_obj: number)
     if Toggles.NotifySound.Value then
         local sound = Instance.new("Sound", workspace) do
             sound.SoundId = "rbxassetid://4590662766"
-            sound.Volume = 2
+            sound.Volume = 5
             sound.PlayOnRemove = true
             sound:Destroy()
         end
@@ -628,18 +469,6 @@ end
 --// Main \\--
  
 print("reached main")
-
-local AutomationGroupBox = Tabs.Main:AddRightGroupbox("Automation") do
-    AutomationGroupBox:AddToggle("AutoInteract", {
-        Text = "Auto Interact",
-        Default = false
-    }):AddKeyPicker("AutoInteractKey", {
-        Mode = Library.IsMobile and "Toggle" or "Hold",
-        Default = "R",
-        Text = "Auto Interact",
-        SyncToggleState = Library.IsMobile
-    })
-end
 
 local PlayerGroupBox = Tabs.Main:AddLeftGroupbox("Player") do
     PlayerGroupBox:AddToggle("Noclip", {
@@ -868,15 +697,29 @@ Toggles.InstaInteract:OnChanged(function(value)
 end)
 
 Toggles.PromptClip:OnChanged(function(value)
-    for _, prompt in pairs(workspace.CurrentRooms:GetDescendants()) do        
-        if Script.Functions.PromptCondition(prompt) then
+    for _, prompt in pairs(workspace.CurrentRooms:GetDescendants()) do
+        if prompt:IsA("ProximityPrompt") then
+            print(prompt.Parent.Name, not table.find(PromptTable.Excluded, prompt.Name), table.find(PromptTable.Clip, prompt.Name) or table.find(PromptTable.Objects, prompt.Parent.Name))
+        end
+        
+        if prompt:IsA("ProximityPrompt") and not table.find(PromptTable.Excluded, prompt.Name) and (table.find(PromptTable.Clip, prompt.Name) or table.find(PromptTable.Objects, prompt.Parent.Name)) then
             if value then
+                if not prompt:GetAttribute("Enabled") then prompt:SetAttribute("Enabled", prompt.Enabled) end
+                if not prompt:GetAttribute("Clip") then prompt:SetAttribute("Clip", prompt.RequiresLineOfSight) end
+
                 prompt.RequiresLineOfSight = false
-            else
-                if prompt:GetAttribute("Enabled") and prompt:GetAttribute("Clip") then
-                    prompt.Enabled = prompt:GetAttribute("Enabled")
-                    prompt.RequiresLineOfSight = prompt:GetAttribute("Clip")
+                if prompt.Name == "ModulePrompt" then
+                    prompt.Enabled = true
+    
+                    prompt:GetPropertyChangedSignal("Enabled"):Connect(function()
+                        if Toggles.PromptClip.Value then
+                            prompt.Enabled = true
+                        end
+                    end)
                 end
+            else
+                prompt.Enabled = prompt:GetAttribute("Enabled") or true
+                prompt.RequiresLineOfSight = prompt:GetAttribute("Clip") or true
             end
         end
     end
@@ -884,7 +727,7 @@ end)
 
 Options.PromptReachMultiplier:OnChanged(function(value)
     for _, prompt in pairs(workspace.CurrentRooms:GetDescendants()) do
-        if Script.Functions.PromptCondition(prompt) then
+        if prompt:IsA("ProximityPrompt") and not table.find(PromptTable.Excluded, prompt.Name) then
             if not prompt:GetAttribute("Distance") then prompt:SetAttribute("Distance", prompt.MaxActivationDistance) end
 
             prompt.MaxActivationDistance = prompt:GetAttribute("Distance") * value
