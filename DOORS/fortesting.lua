@@ -377,8 +377,54 @@ function Script.Functions.ChildCheck(child, includeESP)
             if isRetro and prompt.Parent.Parent.Name == "RetroWardrobe" then
                 return false
             end
-            return true
+
+            return PromptTable.Aura[prompt.Name] ~= nil
         end)
+
+        for _, prompt: ProximityPrompt in pairs(prompts) do
+            if not prompt.Parent then continue end
+            if prompt.Parent:GetAttribute("JeffShop") then continue end
+            if prompt.Parent:GetAttribute("PropType") == "Battery" and ((character:FindFirstChildOfClass("Tool") and character:FindFirstChildOfClass("Tool"):GetAttribute("RechargeProp") ~= "Battery") or character:FindFirstChildOfClass("Tool") == nil) then continue end 
+            if prompt.Parent:GetAttribute("PropType") == "Heal" and humanoid and humanoid.Health == humanoid.MaxHealth then continue end
+
+            task.spawn(function()
+                -- checks if distance can interact with prompt and if prompt can be interacted again
+                if Script.Functions.DistanceFromCharacter(prompt.Parent) < prompt.MaxActivationDistance and (not prompt:GetAttribute("Interactions" .. localPlayer.Name) or PromptTable.Aura[prompt.Name] or table.find(PromptTable.AuraObjects, prompt.Parent.Name)) then
+                    -- painting checks
+                    if prompt.Parent.Name == "Slot" and prompt.Parent:GetAttribute("Hint") and character then
+                        if Script.Temp.PaintingDebounce then return end
+                        
+                        local currentPainting = character:FindFirstChild("Prop")
+                        if not currentPainting and prompt.Parent:FindFirstChild("Prop") and prompt.Parent:GetAttribute("Hint") ~= prompt.Parent.Prop:GetAttribute("Hint") then
+                            return firePrompt(prompt)
+                        end
+
+                        if prompt.Parent:FindFirstChild("Prop") then 
+                            if prompt.Parent:GetAttribute("Hint") == prompt.Parent.Prop:GetAttribute("Hint") then
+                                return
+                            end
+                        end
+
+                        if prompt.Parent:GetAttribute("Hint") == currentPainting:GetAttribute("Hint") then
+                            Script.Temp.PaintingDebounce = true
+
+                            local oldHint = currentPainting:GetAttribute("Hint")
+                            repeat task.wait()
+                                firePrompt(prompt)
+                            until not character:FindFirstChild("Prop") or character:FindFirstChild("Prop"):GetAttribute("Hint") ~= oldHint
+
+                            task.wait(0.15)
+                            Script.Temp.PaintingDebounce = false
+                        end                            
+                        
+                        return
+                    end
+                    
+                    firePrompt(prompt)
+                end
+            end)
+        end
+    end
 
     if child:IsA("Model") then
         if (child:GetAttribute("Pickup") or child:GetAttribute("PropType")) and not child:GetAttribute("FuseID") then
