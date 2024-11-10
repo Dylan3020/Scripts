@@ -433,6 +433,8 @@ function Script.Functions.SetupCharacterConnection(newCharacter)
     character = newCharacter
 
     humanoid = character:WaitForChild("Humanoid")
+
+    rootPart = character:WaitForChild("HumanoidRootPart")
 end
 
 function Script.Functions.GetShortName(entityName: string)
@@ -457,7 +459,7 @@ function Script.Functions.Alert(message: string, time_obj: number)
     if Toggles.NotifySound.Value then
         local sound = Instance.new("Sound", workspace) do
             sound.SoundId = "rbxassetid://4590662766"
-            sound.Volume = 5
+            sound.Volume = 2
             sound.PlayOnRemove = true
             sound:Destroy()
         end
