@@ -433,42 +433,6 @@ function Script.Functions.SetupCharacterConnection(newCharacter)
     character = newCharacter
 
     humanoid = character:WaitForChild("Humanoid")
-
-    if humanoid then
-        Script.Connections["Jump"] = humanoid:GetPropertyChangedSignal("JumpHeight"):Connect(function()
-            if not Toggles.SpeedBypass.Value and latestRoom.Value < 99 then
-                if humanoid.JumpHeight > 0 then
-                    lastSpeed = Options.SpeedSlider.Value
-                    Options.SpeedSlider:SetMax(3)
-                elseif lastSpeed > 0 then
-                    Options.SpeedSlider:SetMax(7)
-                    Options.SpeedSlider:SetValue(lastSpeed)
-                    lastSpeed = 0
-                end
-            end
-        end)
-
-        Script.Connections["Died"] = humanoid.Died:Connect(function()
-            if collisionClone then
-                collisionClone:Destroy()
-            end
-        end)
-    end
-
-    rootPart = character:WaitForChild("HumanoidRootPart")
-
-    collision = character:WaitForChild("Collision")
-    if collision then
-        collisionClone = collision:Clone()
-        collisionClone.CanCollide = false
-        collisionClone.Massless = true
-        collisionClone.Name = "CollisionClone"
-        if collisionClone:FindFirstChild("CollisionCrouch") then
-            collisionClone.CollisionCrouch:Destroy()
-        end
-
-        collisionClone.Parent = character
-    end
 end
 
 function Script.Functions.GetShortName(entityName: string)
@@ -493,7 +457,7 @@ function Script.Functions.Alert(message: string, time_obj: number)
     if Toggles.NotifySound.Value then
         local sound = Instance.new("Sound", workspace) do
             sound.SoundId = "rbxassetid://4590662766"
-            sound.Volume = 2
+            sound.Volume = 10
             sound.PlayOnRemove = true
             sound:Destroy()
         end
@@ -505,14 +469,6 @@ end
 print("reached main")
 
 local PlayerGroupBox = Tabs.Main:AddLeftGroupbox("Player") do
-    PlayerGroupBox:AddSlider("SpeedSlider", {
-        Text = "Speed Boost",
-        Default = 0,
-        Min = 0,
-        Max = 69,
-        Rounding = 1
-    })
-
     PlayerGroupBox:AddToggle("Noclip", {
         Text = "Noclip",
         Default = false
@@ -541,9 +497,9 @@ end
 
 local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
-        Text = "Play Again",
+        Text = "Respawn Character",
         Func = function()
-            remotesFolder.BludTrippin2:Fire()
+            remotesFolder.Respawn:FireServer()
         end,
         DoubleClick = true
     })
