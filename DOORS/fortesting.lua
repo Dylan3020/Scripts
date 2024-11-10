@@ -964,31 +964,23 @@ Library:GiveSignal(Lighting:GetPropertyChangedSignal("Ambient"):Connect(function
         Lighting.Ambient = Color3.new(1, 1, 1)
     end
 
-    if character then
-        if isMines and Toggles.FastLadder.Value and character:GetAttribute("Climbing") then
-            character:SetAttribute("SpeedBoostBehind", 500)
-        else
-            character:SetAttribute("SpeedBoostBehind", Options.SpeedSlider.Value)
-        end
-        
+    if rootPart then
+        rootPart.CanCollide = not Toggles.Noclip.Value
+    end
 
-        if rootPart then
-            rootPart.CanCollide = not Toggles.Noclip.Value
+    if collision then
+        collision.CanCollide = not Toggles.Noclip.Value
+        if collision:FindFirstChild("CollisionCrouch") then
+            collision.CollisionCrouch.CanCollide = not Toggles.Noclip.Value
         end
+    end
 
-        if collision then
-            collision.CanCollide = not Toggles.Noclip.Value
-            if collision:FindFirstChild("CollisionCrouch") then
-                collision.CollisionCrouch.CanCollide = not Toggles.Noclip.Value
-            end
-        end
-
-        if character:FindFirstChild("UpperTorso") then
-            character.UpperTorso.CanCollide = not Toggles.Noclip.Value
-        end
-        if character:FindFirstChild("LowerTorso") then
-            character.LowerTorso.CanCollide = not Toggles.Noclip.Value
-        end
+    if character:FindFirstChild("UpperTorso") then
+        character.UpperTorso.CanCollide = not Toggles.Noclip.Value
+    end
+    
+    if character:FindFirstChild("LowerTorso") then
+        character.LowerTorso.CanCollide = not Toggles.Noclip.Value
     end
 end))
 
