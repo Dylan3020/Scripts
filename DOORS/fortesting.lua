@@ -380,6 +380,69 @@ function Script.Functions.ObjectiveESPCheck(child)
     end
 end
 
+--//prompt shit--//
+
+    function Script.Functions.IsPromptInRange(prompt: ProximityPrompt)
+        return Script.Functions.DistanceFromCharacter(prompt:FindFirstAncestorWhichIsA("BasePart") or prompt:FindFirstAncestorWhichIsA("Model") or prompt.Parent) <= prompt.MaxActivationDistance
+    end
+    
+    function Script.Functions.GetNearestAssetWithCondition(condition: () -> ())
+        local nearestDistance = math.huge
+        local nearest
+        for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
+            if not room:FindFirstChild("Assets") then continue end
+    
+            for i, v in pairs(room.Assets:GetChildren()) do
+                if condition(v) and Script.Functions.DistanceFromCharacter(v) < nearestDistance then
+                    nearestDistance = Script.Functions.DistanceFromCharacter(v)
+                    nearest = v
+                end
+            end
+        end
+    
+        return nearest
+    end
+
+    function Script.Functions.GetAllPromptsWithCondition(condition)
+        assert(typeof(condition) == "function", "Expected a function as condition argument but got " .. typeof(condition))
+        
+        local validPrompts = {}
+        for _, prompt in pairs(PromptTable.GamePrompts) do
+            if not prompt or not prompt:IsDescendantOf(workspace) then continue end
+    
+            local success, returnData = pcall(function()
+                return condition(prompt)
+            end)
+    
+            assert(success, "An error has occured while running condition function.\n" .. tostring(returnData))
+            assert(typeof(returnData) == "boolean", "Expected condition function to return a boolean")
+            
+            if returnData then
+                table.insert(validPrompts, prompt)
+            end
+        end
+    
+        return validPrompts
+    end
+    
+    function Script.Functions.GetNearestPromptWithCondition(condition)
+        local prompts = Script.Functions.GetAllPromptsWithCondition(condition)
+    
+        local nearestPrompt = nil
+        local oldHighestDistance = math.huge
+        for _, prompt in pairs(prompts) do
+            local promptParent = prompt:FindFirstAncestorWhichIsA("BasePart") or prompt:FindFirstAncestorWhichIsA("Model")
+    
+            if promptParent and Script.Functions.DistanceFromCharacter(promptParent) < oldHighestDistance then
+                nearestPrompt = prompt
+                oldHighestDistance = Script.Functions.DistanceFromCharacter(promptParent)
+            end
+        end
+    
+        return nearestPrompt
+    end
+end
+
 function Script.Functions.PromptCondition(prompt)
     local modelAncestor = prompt:FindFirstAncestorOfClass("Model")
     return 
