@@ -32,26 +32,61 @@ local ShortNames = {
 }
 
 local PromptTable = {
+    GamePrompts = {},
+
+    Aura = {
+        ["ActivateEventPrompt"] = false,
+        ["AwesomePrompt"] = true,
+        ["FusesPrompt"] = true,
+        ["HerbPrompt"] = false,
+        ["LeverPrompt"] = true,
+        ["LootPrompt"] = false,
+        ["ModulePrompt"] = true,
+        ["SkullPrompt"] = false,
+        ["UnlockPrompt"] = true,
+        ["ValvePrompt"] = false,
+        ["PropPrompt"] = true
+    },
+    AuraObjects = {
+        "Lock",
+        "Button"
+    },
+
     Clip = {
+        "AwesomePrompt",
+        "FusesPrompt",
         "HerbPrompt",
         "HidePrompt",
         "LeverPrompt",
         "LootPrompt",
+        "ModulePrompt",
         "Prompt",
+        "PushPrompt",
         "SkullPrompt",
         "UnlockPrompt",
+        "ValvePrompt"
     },
-
-    Objects = {
-        "LeverModel",
+    ClipObjects = {
+        "LeverForGate",
         "LiveBreakerPolePickup",
         "LiveHintBook",
         "Button",
     },
 
     Excluded = {
-        "HintPrompt",
-        "InteractPrompt"
+        Prompt = {
+            "HintPrompt",
+            "InteractPrompt"
+        },
+
+        Parent = {
+            "KeyObtainFake",
+            "Padlock"
+        },
+
+        ModelAncestor = {
+            "DoorFake"
+        }
     }
 }
 
