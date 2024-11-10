@@ -501,7 +501,7 @@ local MiscGroupBox = Tabs.Main:AddRightGroupbox("Misc") do
     MiscGroupBox:AddButton({
         Text = "Respawn Character",
         Func = function()
-            remotesFolder.Respawn:FireServer()
+            ReplicatedStorage.Respawn:FireServer()
         end,
         DoubleClick = true
     })
