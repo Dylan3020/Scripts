@@ -380,6 +380,16 @@ function Script.Functions.ObjectiveESPCheck(child)
     end
 end
 
+function Script.Functions.PromptCondition(prompt)
+    local modelAncestor = prompt:FindFirstAncestorOfClass("Model")
+    return 
+        prompt:IsA("ProximityPrompt") and (
+            not table.find(PromptTable.Excluded.Prompt, prompt.Name) 
+            and not table.find(PromptTable.Excluded.Parent, prompt.Parent and prompt.Parent.Name or "") 
+            and not (table.find(PromptTable.Excluded.ModelAncestor, modelAncestor and modelAncestor.Name or ""))
+        )
+end
+
 function Script.Functions.ChildCheck(child)
     if Script.Functions.PromptCondition(child) then
         task.defer(function()
