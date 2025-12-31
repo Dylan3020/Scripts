@@ -18,6 +18,20 @@ spawned("Ambush")
 
 elseif child.Name == "TrollfaceMoving" then
 spawned("Trollface")
+elseif child.Name == "A60" then
+spawned("A-60")
+elseif child.Name == "A120" then
+spawned("A-120")
+elseif child.Name == "BackdoorRush" then
+spawned("Blitz")
+elseif child.Name == "MonumentEntity" then
+spawned("Monument")
+elseif child.Name == "Groundskeeper" then
+spawned("Groundskeeper")
+elseif child.Name == "Eyes" then
+spawned("Eyes")
+elseif child.Name == "BackdoorLookman" then
+spawned("Lookman")
 elseif child.Name == "Josh HutchersonMoving" then
 spawned("Josh Hutcherson")
 elseif child.Name == "werid entityMoving" then
