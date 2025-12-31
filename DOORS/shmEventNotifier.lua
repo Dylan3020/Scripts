@@ -1,7 +1,7 @@
 local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 local hum = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid")
-local entitynames = {"RushMoving","AmbushMoving", "A60", "A120", "JeffTheKiller", "Rush", "Ambush"}
+local entitynames = {"RushMoving","AmbushMoving", "A60", "A120", "Eyes", "Screech", "BackdoorRush", "BackdoorLookman", "Groundskeeper", "JeffTheKiller", "Rush", "Ambush"}
  local addconnect
         addconnect = workspace.ChildAdded:Connect(function(v)
             if table.find(entitynames,v.Name) then
