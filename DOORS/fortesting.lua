@@ -146,19 +146,7 @@ if IsMainAccount then
     end
 
     ObtainReviveEvent.OnClientInvoke = OnObtainRevive
-
-    AttemptToKillLocalPlayer()
-else
-    if OtherPlayer:GetAttribute("Alive") then
-        StarterGui:SetCore("SendNotification", {
-            Title = Title,
-            Text = "Waiting for the other account to die...",
-            Duration = 5
-        })
-
-        OtherPlayer:GetAttributeChangedSignal("Alive"):Wait()
-    end
-
+    
     for i = 1, 5 do
         StarterGui:SetCore("SendNotification", {
             Title = Title,
