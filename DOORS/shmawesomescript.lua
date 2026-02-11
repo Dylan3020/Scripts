@@ -532,10 +532,6 @@ Tab:Toggle("No Breaker Puzzle","Tricks the game into thinking you completed the 
         EntityInfo.EBF:FireServer()
     end
 end)
-Tab:Button("Revive Yourself","Get Revived",function()
-        EntityInfo.Revive:FireServer()
-    end
-end)
 Tab:Toggle("Noclip","Lets you walk through any object. Does not work on Doors.",false,function(Bool)
     Noclip = Bool
     if Character:FindFirstChild("Collision") then
