@@ -1,1 +1,155 @@
-triple T
+--// 
+--// Revive Duper Script by upio
+--// Method found by lolcat
+--// 
+
+--// Services
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = Instance.new("VirtualInputManager")
+
+--// Remotes
+local RemotesFolder = ReplicatedStorage.RemotesFolder
+local ReviveFriendEvent = RemotesFolder.ReviveFriend
+local ObtainReviveEvent = RemotesFolder.ObtainGiftedRevive
+
+--// Player Variables
+local LocalPlayer = Players.LocalPlayer
+local OtherPlayer
+
+--// Game Data
+local LatestRoom = ReplicatedStorage.GameData.LatestRoom
+local Revives = LocalPlayer.PlayerGui.TopbarUI.Topbar.StatsTopbarHandler.StatModules.Revives.RevivesVal
+
+--// Constants
+local IsMainAccount = LocalPlayer.Name == AccountToDuplicateTo
+local DuplicationCount = DuplicationAmount or 1000
+local Title = IsMainAccount and "Revive Dupe Helper (Main Account)" or "Revive Dupe Helper (Alt Account)"
+
+--// Dupe State stuff
+local IsOtherAccountInitialized = false
+local IsGiftingRevive = false
+
+StarterGui:SetCore("SendNotification", {
+    Title = Title,
+    Text = "Waiting for other account to initialize...",
+    Duration = 5
+})
+
+repeat task.wait() until IsOtherAccountInitialized
+
+--// Functions
+local function AttemptToKillLocalPlayer()
+    if LatestRoom.Value == 0 then
+        StarterGui:SetCore("SendNotification", {
+            Title = "Revive Dupe Helper",
+            Text = "Please open a door",
+            Duration = 5
+        })
+
+        LatestRoom:GetPropertyChangedSignal("Value"):Wait()
+    end
+
+    if replicatesignal then
+        replicatesignal(LocalPlayer.Kill)
+    else
+        StarterGui:SetCore("SendNotification", {
+            Title = "Revive Dupe Helper",
+            Text = "Your executor does not support replicatesignal, please die manually",
+            Duration = 5
+        })
+        LocalPlayer.Character.Humanoid.Died:Wait()
+    end
+
+    StarterGui:SetCore("SendNotification", {
+        Title = "Revive Dupe Helper",
+        Text = "Make your alt account try and revive you. (Click more than once)",
+        Duration = 5
+    })
+end
+
+--// Main Logic
+--// We account for delays in communication, so we send a notification to the user
+--// If the ping is too high, heh.. skill issue
+StarterGui:SetCore("SendNotification", {
+    Title = Title,
+    Text = "Please wait for 5 seconds to ensure proper communication has been established.",
+    Duration = 5
+})
+task.wait(5)
+
+--// If its gifting, we don't want to interrupt the gifting process
+if IsGiftingRevive then
+    return
+end
+
+--// Main account has to die.
+if IsMainAccount then
+    local ReviveObtainedAmount = 0
+    local function OnObtainRevive(...)
+        ReviveObtainedAmount += 1
+
+        if ReviveObtainedAmount > (DuplicationCount * 0.85) then
+            return true
+        end
+
+        task.wait(9e9)
+
+        return true
+    end
+
+    if hookmetamethod then
+        local mtHook; mtHook = hookmetamethod(game, "__newindex", function(...)
+            local self, key = ...
+    
+            if rawequal(self, ObtainReviveEvent) and key == "OnClientInvoke" then
+                if not checkcaller() then
+                    return
+                end
+            end
+    
+            return mtHook(...)
+        end)
+    else
+        -- might not work i have no clue honestly
+        task.defer(function()
+            while task.wait() do
+                ObtainReviveEvent.OnClientInvoke = OnObtainRevive
+            end
+        end)
+    end
+
+    ObtainReviveEvent.OnClientInvoke = OnObtainRevive
+
+    AttemptToKillLocalPlayer()
+else
+    if OtherPlayer:GetAttribute("Alive") then
+        StarterGui:SetCore("SendNotification", {
+            Title = Title,
+            Text = "Waiting for the other account to die...",
+            Duration = 5
+        })
+
+        OtherPlayer:GetAttributeChangedSignal("Alive"):Wait()
+    end
+
+    for i = 1, 5 do
+        StarterGui:SetCore("SendNotification", {
+            Title = Title,
+            Text = `Duping in {6 - i} seconds...`,
+            Duration = 1
+        })
+        task.wait(1)
+    end
+
+    for i = 1, DuplicationCount do
+        ReviveFriendEvent:FireServer(OtherPlayer.Name)
+    end
+
+    StarterGui:SetCore("SendNotification", {
+        Title = Title,
+        Text = "Duping completed!",
+        Duration = 5
+    })
+end
