@@ -16,8 +16,6 @@ spawned("Rush")
 elseif child.Name == "AmbushMoving" then
 spawned("Ambush")
 
-elseif child.Name == "TrollfaceMoving" then
-spawned("Trollface")
 elseif child.Name == "A60" then
 spawned("A-60")
 elseif child.Name == "A120" then
@@ -32,34 +30,25 @@ elseif child.Name == "Eyes" then
 spawned("Eyes")
 elseif child.Name == "BackdoorLookman" then
 spawned("Lookman")
-elseif child.Name == "Josh HutchersonMoving" then
-spawned("Josh Hutcherson")
-elseif child.Name == "werid entityMoving" then
-spawned("werid entity")
-elseif child.Name == "BlitzMoving" then
-spawned("Blitz")
-elseif child.Name == "Ambush_ModifierMoving" then
-spawned("Ambush")
-elseif child.Name == "ShadowA60Moving" then
-spawned("Shadow A-60")
-elseif child.Name == "ShadowA120Moving" then
-spawned("Shadow A-120")
-elseif child.Name == "AnglerMoving" then
-spawned("Angler")
-elseif child.Name == "FrogerMoving" then
-spawned("Froger")
-elseif child.Name == "eyeMoving" then
-spawned("eye")
-elseif child.Name == "scaryfaceMoving" then
-spawned("Scary Face")
-elseif child.Name == "CustomMoving" then
-spawned("Custom Entity")
-elseif child.Name == "Jeff The Killer" then
-spawned("Jeff The Killer")
-elseif child.Name == "PandemoniumMoving" then
-spawned("Pandemonium")
-elseif child.Name == "ContentMoving" then
-spawned("Content")
+elseif child.name == "Death" then
+spawned("Ripper")
+elseif child.name == "RushCounterpart" then
+spawned("Cease")
+elseif child.name == "A-60" then
+spawned("A-60 Multimonster")
+elseif child.name == "ReboundMoving" then
+spawned("Rebound")
+elseif child.name == "Silence" then
+spawned("Silence")
+elseif child.name == "monster2" then
+spawned("A-200")
+elseif child.name == "Deer God" then
+spawned("Deer God")
+
+
+
+
+
 
 end
 end)
