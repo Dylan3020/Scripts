@@ -30,19 +30,19 @@ elseif child.Name == "Eyes" then
 spawned("Eyes")
 elseif child.Name == "BackdoorLookman" then
 spawned("Lookman")
-elseif child.name == "Death" then
+elseif child.name == "RipperMoving" then
 spawned("Ripper")
-elseif child.name == "RushCounterpart" then
+elseif child.name == "CeaseMoving" then
 spawned("Cease")
 elseif child.name == "A-60" then
 spawned("A-60 Multimonster")
-elseif child.name == "ReboundMoving" then
+elseif child.name == "Rebound" then
 spawned("Rebound")
 elseif child.name == "Silence" then
 spawned("Silence")
 elseif child.name == "monster2" then
 spawned("A-200")
-elseif child.name == "Deer God" then
+elseif child.name == "Specimen 8" then
 spawned("Deer God")
 
 
